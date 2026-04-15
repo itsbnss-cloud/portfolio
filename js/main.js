@@ -270,22 +270,66 @@ function initMagnetic() {
 }
 
 /* ============================================================
-   PROJECTS GRID
+   PROJECTS GRID — vertical snap with focus/blur depth
    ============================================================ */
-function renderProjects(filter = 'all') {
-  const grid = document.getElementById('projects-grid');
-  const scrollWrap = document.getElementById('projects-scroll-wrap');
-  const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+let projectsScrollLocked = false;
+let projectsScrollUnlisten = null;
+let projectsWheelUnlisten = null;
 
-  if (scrollWrap) scrollWrap.scrollLeft = 0;
+function initProjectsFocus(scrollWrap) {
+  // Detach previous listeners
+  if (projectsScrollUnlisten) projectsScrollUnlisten();
+  if (projectsWheelUnlisten)  projectsWheelUnlisten();
+
+  function updateActive() {
+    const center = scrollWrap.scrollTop + scrollWrap.clientHeight / 2;
+    const cards  = scrollWrap.querySelectorAll('.project-card');
+    let closest = null, closestDist = Infinity;
+    cards.forEach(card => {
+      const dist = Math.abs((card.offsetTop + card.offsetHeight / 2) - center);
+      if (dist < closestDist) { closestDist = dist; closest = card; }
+    });
+    cards.forEach(c => c.classList.toggle('is-active', c === closest));
+  }
+
+  scrollWrap.addEventListener('scroll', updateActive, { passive: true });
+  projectsScrollUnlisten = () => scrollWrap.removeEventListener('scroll', updateActive);
+
+  // Wheel: one card at a time, boundary-aware
+  const onWheel = e => {
+    const cards = Array.from(scrollWrap.querySelectorAll('.project-card'));
+    if (!cards.length) return;
+    const active = cards.find(c => c.classList.contains('is-active')) || cards[0];
+    const idx    = cards.indexOf(active);
+    const next   = idx + (e.deltaY > 0 ? 1 : -1);
+    if (next < 0 || next >= cards.length) return; // let page scroll at boundaries
+    e.preventDefault();
+    if (projectsScrollLocked) return;
+    projectsScrollLocked = true;
+    cards[next].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => { projectsScrollLocked = false; }, 700);
+  };
+  scrollWrap.addEventListener('wheel', onWheel, { passive: false });
+  projectsWheelUnlisten = () => scrollWrap.removeEventListener('wheel', onWheel);
+
+  // First active card
+  updateActive();
+}
+
+function renderProjects(filter = 'all') {
+  const grid      = document.getElementById('projects-grid');
+  const scrollWrap = document.getElementById('projects-scroll-wrap');
+  const filtered  = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+
+  if (scrollWrap) scrollWrap.scrollTop = 0;
 
   if (filtered.length === 0) {
-    grid.innerHTML = `<div style="padding:3rem;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;">Bientôt disponible ✦</div>`;
+    grid.innerHTML = `<div style="padding:3rem;color:var(--muted);font-size:13px;font-weight:600;">Bientôt disponible ✦</div>`;
     return;
   }
 
   grid.innerHTML = filtered.map(p => `
-    <div class="project-card" data-id="${p.id}" style="cursor:none">
+    <div class="project-card" data-id="${p.id}">
       <img src="${p.thumb}" alt="${p.title}" class="project-card-img" loading="lazy" />
       <div class="project-overlay">
         <h3 class="project-title">${p.title}</h3>
@@ -297,8 +341,6 @@ function renderProjects(filter = 'all') {
     </div>
   `).join('');
 
-  gsap.from('.project-card', { opacity: 0, y: 20, scale: 0.97, duration: 0.45, stagger: 0.07, ease: 'power2.out' });
-
   grid.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
@@ -306,6 +348,11 @@ function renderProjects(filter = 'all') {
       const project = projects.find(p => p.id === parseInt(card.dataset.id));
       if (project) openLightbox(project);
     });
+  });
+
+  requestAnimationFrame(() => {
+    gsap.from('.project-card', { opacity: 0, y: 30, duration: 0.5, stagger: 0.1, ease: 'power2.out' });
+    initProjectsFocus(scrollWrap);
   });
 }
 
@@ -321,11 +368,12 @@ function initProjects() {
 }
 
 /* ============================================================
-   LIGHTBOX
+   LIGHTBOX — Vertical Reel
    ============================================================ */
 let lbIndex = 0;
 let lbProject = null;
-let lbLocked = false;
+let lbScrollLocked = false;
+let lbReelOnScroll = null;
 
 function updateLbProgress() {
   const fill = document.querySelector('.lb-progress-fill');
@@ -336,141 +384,124 @@ function updateLbProgress() {
   fill.style.width = pct + '%';
 }
 
+function updateLbCounter() {
+  const el = document.querySelector('.lb-counter');
+  if (el && lbProject) el.textContent = `${lbIndex + 1} / ${lbProject.gallery.length}`;
+}
+
+function navigateLb(dir) {
+  if (!lbProject) return;
+  const n = lbProject.gallery.length;
+  const next = Math.max(0, Math.min(n - 1, lbIndex + dir));
+  if (next === lbIndex) return;
+  const reel = document.getElementById('lb-reel');
+  const slides = reel.querySelectorAll('.lb-slide');
+  slides[next]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function buildLbReel(project) {
+  const reel = document.getElementById('lb-reel');
+
+  // Remove previous scroll listener
+  if (lbReelOnScroll) reel.removeEventListener('scroll', lbReelOnScroll);
+
+  reel.innerHTML = project.gallery.map((src, i) => `
+    <div class="lb-slide" data-index="${i}">
+      <img src="${src}" alt="${project.title}" class="lb-slide-img" loading="${i === 0 ? 'eager' : 'lazy'}" />
+    </div>
+  `).join('');
+
+  reel.scrollTop = 0;
+
+  // Activate first slide after paint
+  requestAnimationFrame(() => {
+    const first = reel.querySelector('.lb-slide');
+    if (first) first.classList.add('is-active');
+  });
+
+  // Track which slide is centered
+  lbReelOnScroll = () => {
+    const center = reel.scrollTop + reel.clientHeight / 2;
+    const slides = reel.querySelectorAll('.lb-slide');
+    let closest = null, closestDist = Infinity;
+    slides.forEach(s => {
+      const dist = Math.abs((s.offsetTop + s.offsetHeight / 2) - center);
+      if (dist < closestDist) { closestDist = dist; closest = s; }
+    });
+    slides.forEach(s => s.classList.toggle('is-active', s === closest));
+    if (closest) {
+      const ni = parseInt(closest.dataset.index);
+      if (ni !== lbIndex) {
+        lbIndex = ni;
+        updateLbCounter();
+        updateLbProgress();
+      }
+    }
+  };
+  reel.addEventListener('scroll', lbReelOnScroll, { passive: true });
+}
+
 function openLightbox(project) {
   lbProject = project;
   lbIndex   = 0;
-  lbLocked  = false;
+  lbScrollLocked = false;
 
-  const lb    = document.getElementById('lightbox');
-  const title = lb.querySelector('.lb-title');
-  const tag   = lb.querySelector('.lb-tag');
+  const lb = document.getElementById('lightbox');
+  lb.querySelector('.lb-title').textContent = project.title;
+  lb.querySelector('.lb-tag').textContent   = project.tag;
+  updateLbCounter();
+  updateLbProgress();
 
-  title.textContent = project.title;
-  tag.textContent   = project.tag;
-
+  buildLbReel(project);
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  renderLbSlide(0);
 }
 
 function closeLightbox() {
-  const lb = document.getElementById('lightbox');
+  const lb   = document.getElementById('lightbox');
+  const reel = document.getElementById('lb-reel');
   gsap.to(lb, {
     opacity: 0, duration: 0.35, ease: 'power2.in',
     onComplete: () => {
       lb.classList.remove('open');
       gsap.set(lb, { clearProps: 'opacity' });
       document.body.style.overflow = '';
+      if (lbReelOnScroll) reel.removeEventListener('scroll', lbReelOnScroll);
+      reel.innerHTML = '';
       lbProject = null;
-      lbLocked  = false;
+      lbScrollLocked = false;
     }
   });
 }
 
-// dir: 0 = initial open, 1 = forward, -1 = backward
-function renderLbSlide(dir = 0) {
-  const lb      = document.getElementById('lightbox');
-  const img     = lb.querySelector('.lb-img');
-  const counter = lb.querySelector('.lb-counter');
-
-  const commit = () => {
-    img.src = lbProject.gallery[lbIndex];
-    img.alt = lbProject.title;
-    counter.textContent = `${lbIndex + 1} / ${lbProject.gallery.length}`;
-    updateLbProgress();
-  };
-
-  if (dir === 0) {
-    // Initial: scale in from slightly large + blur
-    commit();
-    gsap.fromTo(img,
-      { opacity: 0, scale: 1.06 },
-      { opacity: 1, scale: 1, duration: 0.7, ease: 'expo.out',
-        onComplete: () => { lbLocked = false; } }
-    );
-  } else {
-    // Cinematic push: slide out → swap src → slide in
-    const xOut = dir * 90;
-    gsap.to(img, {
-      x: xOut, opacity: 0, scale: 0.93,
-      duration: 0.3, ease: 'power3.in',
-      onComplete: () => {
-        commit();
-        gsap.fromTo(img,
-          { x: -xOut * 0.65, opacity: 0, scale: 0.93 },
-          { x: 0, opacity: 1, scale: 1,
-            duration: 0.65, ease: 'expo.out',
-            onComplete: () => { lbLocked = false; } }
-        );
-      }
-    });
-  }
-}
-
 function initLightbox() {
-  const lb    = document.getElementById('lightbox');
-  const prev  = lb.querySelector('.lb-prev');
-  const next  = lb.querySelector('.lb-next');
+  const lb   = document.getElementById('lightbox');
+  const reel = document.getElementById('lb-reel');
   const close = lb.querySelector('.lb-close');
 
   close.addEventListener('click', closeLightbox);
 
-  // Click on stage background → close
-  lb.querySelector('.lb-stage').addEventListener('click', e => {
-    if (e.target === lb.querySelector('.lb-stage')) closeLightbox();
-  });
-
-  const navigate = (dir) => {
-    if (!lbProject || lbLocked) return;
-    const n = lbProject.gallery.length;
-    lbIndex = (lbIndex + dir + n) % n;
-    lbLocked = true;
-    renderLbSlide(dir);
-  };
-
-  prev.addEventListener('click', () => navigate(-1));
-  next.addEventListener('click', () => navigate(1));
-
+  // Keyboard
   document.addEventListener('keydown', e => {
     if (!lbProject) return;
-    if (e.key === 'Escape')     closeLightbox();
-    if (e.key === 'ArrowLeft')  navigate(-1);
-    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'Escape')    closeLightbox();
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); navigateLb(1); }
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); navigateLb(-1); }
   });
 
-  // Scroll wheel + trackpad — one gesture = one slide, lock during animation
+  // Mouse wheel: one slide at a time
   lb.addEventListener('wheel', e => {
+    if (!lbProject) return;
     e.preventDefault();
-    if (!lbProject || lbLocked) return;
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) < 4) return;
-    navigate(delta > 0 ? 1 : -1);
+    if (lbScrollLocked) return;
+    lbScrollLocked = true;
+    navigateLb(e.deltaY > 0 ? 1 : -1);
+    setTimeout(() => { lbScrollLocked = false; }, 650);
   }, { passive: false });
 
-  // Touch swipe
-  let tx = 0, ty = 0;
-  lb.addEventListener('touchstart', e => {
-    tx = e.touches[0].clientX;
-    ty = e.touches[0].clientY;
-  }, { passive: true });
-
-  lb.addEventListener('touchend', e => {
-    if (!lbProject || lbLocked) return;
-    const dx = tx - e.changedTouches[0].clientX;
-    const dy = ty - e.changedTouches[0].clientY;
-    if (Math.abs(dx) >= Math.abs(dy)) {
-      if (Math.abs(dx) > 40) navigate(dx > 0 ? 1 : -1);
-    } else {
-      if (Math.abs(dy) > 40) navigate(dy > 0 ? 1 : -1);
-    }
-  });
-
-  // Cursor hover
-  [prev, next, close].forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
+  // Cursor hover on close
+  close.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  close.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
 }
 
 /* ============================================================
