@@ -191,20 +191,6 @@ function initScrollAnimations() {
     ease: 'power2.out'
   });
 
-  // Projects stagger
-  gsap.from('.project-card', {
-    scrollTrigger: {
-      trigger: '.projects-grid',
-      start: 'top 80%',
-    },
-    opacity: 0,
-    y: 50,
-    scale: 0.95,
-    duration: 0.7,
-    stagger: 0.1,
-    ease: 'power3.out'
-  });
-
   // Contact form
   gsap.from('.contact-form .form-group', {
     scrollTrigger: {
@@ -284,14 +270,101 @@ function initMagnetic() {
 }
 
 /* ============================================================
+   CAROUSEL
+   ============================================================ */
+let carIndex = 0;
+const CAR_GAP = 24; // 1.5rem
+
+function getCardsPerView() {
+  if (window.innerWidth < 600) return 1;
+  if (window.innerWidth < 900) return 2;
+  return 3;
+}
+
+function updateCarousel(animate = true) {
+  const grid = document.getElementById('projects-grid');
+  const vp   = document.getElementById('carousel-viewport');
+  const dots = document.getElementById('carousel-dots');
+  if (!grid || !vp) return;
+
+  const perView = getCardsPerView();
+  const cardW   = (vp.offsetWidth - CAR_GAP * (perView - 1)) / perView;
+  const cards   = Array.from(grid.querySelectorAll('.project-card'));
+  const maxIdx  = Math.max(0, cards.length - perView);
+
+  carIndex = Math.min(Math.max(carIndex, 0), maxIdx);
+  cards.forEach(c => { c.style.width = cardW + 'px'; c.style.flexShrink = '0'; });
+
+  const offset = -(carIndex * (cardW + CAR_GAP));
+  animate
+    ? gsap.to(grid,  { x: offset, duration: 0.55, ease: 'power3.out' })
+    : gsap.set(grid, { x: offset });
+
+  const prevBtn = document.getElementById('car-prev');
+  const nextBtn = document.getElementById('car-next');
+  if (prevBtn) prevBtn.disabled = (carIndex === 0);
+  if (nextBtn) nextBtn.disabled = (carIndex >= maxIdx);
+
+  if (dots) {
+    const count = maxIdx + 1;
+    if (dots.children.length !== count) {
+      dots.innerHTML = Array.from({ length: count }, (_, i) =>
+        `<button class="carousel-dot${i === carIndex ? ' active' : ''}" data-i="${i}" aria-label="Slide ${i+1}"></button>`
+      ).join('');
+      dots.querySelectorAll('.carousel-dot').forEach(d => {
+        d.addEventListener('click', () => { carIndex = +d.dataset.i; updateCarousel(); });
+      });
+    } else {
+      dots.querySelectorAll('.carousel-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === carIndex)
+      );
+    }
+  }
+}
+
+function initCarousel() {
+  document.getElementById('car-prev').addEventListener('click', () => { carIndex--; updateCarousel(); });
+  document.getElementById('car-next').addEventListener('click', () => { carIndex++; updateCarousel(); });
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => updateCarousel(false), 150);
+  });
+
+  // Touch swipe
+  const vp = document.getElementById('carousel-viewport');
+  let tx = 0;
+  vp.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  vp.addEventListener('touchend',   e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) { carIndex += dx > 0 ? 1 : -1; updateCarousel(); }
+  }, { passive: true });
+
+  // Mouse drag
+  let dragging = false, dragX = 0;
+  vp.addEventListener('mousedown', e => { dragging = true; dragX = e.clientX; vp.style.cursor = 'grabbing'; });
+  window.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    vp.style.cursor = '';
+    const dx = dragX - e.clientX;
+    if (Math.abs(dx) > 50) { carIndex += dx > 0 ? 1 : -1; updateCarousel(); }
+  });
+}
+
+/* ============================================================
    PROJECTS GRID
    ============================================================ */
 function renderProjects(filter = 'all') {
+  carIndex = 0;
   const grid = document.getElementById('projects-grid');
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
   if (filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:13px;font-weight:600;">Bientôt disponible ✦</div>`;
+    grid.innerHTML = `<div style="padding:3rem;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;">Bientôt disponible ✦</div>`;
+    gsap.set(grid, { x: 0 });
+    requestAnimationFrame(() => updateCarousel(false));
     return;
   }
 
@@ -308,9 +381,10 @@ function renderProjects(filter = 'all') {
     </div>
   `).join('');
 
-  gsap.from('.project-card', {
-    opacity: 0, y: 30, scale: 0.96,
-    duration: 0.5, stagger: 0.08, ease: 'power2.out'
+  gsap.set(grid, { x: 0 });
+  requestAnimationFrame(() => {
+    updateCarousel(false);
+    gsap.from('.project-card', { opacity: 0, y: 20, scale: 0.97, duration: 0.45, stagger: 0.07, ease: 'power2.out' });
   });
 
   grid.querySelectorAll('.project-card').forEach(card => {
@@ -325,6 +399,7 @@ function renderProjects(filter = 'all') {
 
 function initProjects() {
   renderProjects();
+  initCarousel();
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));

@@ -832,10 +832,68 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   box-shadow: 0 4px 16px var(--y-glow);
 }
 
+/* ── Carousel ── */
+.carousel-outer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.carousel-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 1.5rem;
+  will-change: transform;
+}
+
+.car-btn {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: background 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s, transform 0.2s;
+}
+
+.car-btn:hover:not(:disabled) {
+  background: var(--y);
+  border-color: var(--y);
+  color: #000;
+  transform: scale(1.06);
+}
+
+.car-btn:disabled { opacity: 0.2; pointer-events: none; }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 2rem;
+}
+
+.carousel-dot {
+  width: 6px; height: 6px;
+  border-radius: 3px;
+  background: #2a2a2a;
+  cursor: none;
+  border: none;
+  padding: 0;
+  transition: background 0.3s, width 0.3s;
+}
+
+.carousel-dot.active {
+  background: var(--y);
+  width: 22px;
 }
 
 .project-card {
@@ -1254,7 +1312,8 @@ footer {
 
   .services-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
 
-  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .carousel-outer { gap: 0.85rem; }
+  .car-btn { width: 40px; height: 40px; }
 
   .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
   .form-row { grid-template-columns: 1fr; }
@@ -1284,7 +1343,7 @@ footer {
 
   .services-grid { max-width: 100%; }
 
-  .projects-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .car-btn { width: 36px; height: 36px; }
   .filter-bar { gap: 0.5rem; }
   .filter-btn { padding: 8px 14px; }
 
@@ -1296,7 +1355,8 @@ footer {
   #cursor-dot, #cursor-ring { display: none; }
   body { cursor: auto; }
   .nav-burger, .btn-primary, .btn-ghost, .filter-btn, .service-card, .project-card,
-  .social-link, .nav-brand, .nav-cta, .lb-close, .lb-prev, .lb-next { cursor: pointer; }
+  .social-link, .nav-brand, .nav-cta, .lb-close, .lb-prev, .lb-next,
+  .car-btn, .carousel-dot { cursor: pointer; }
 }
 
 @media (max-width: 380px) {
