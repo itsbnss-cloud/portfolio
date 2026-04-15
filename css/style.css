@@ -1187,8 +1187,8 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 /* default: adjacent slide — slightly dimmed, softly blurred, slightly reduced */
 .lb-slide-img {
   display: block;
-  max-width: min(80vw, 1000px);
-  max-height: 56dvh;
+  max-width: min(90vw, 1400px);
+  max-height: 72dvh;
   object-fit: contain;
   transform: scale(0.88);
   filter: blur(2px);
