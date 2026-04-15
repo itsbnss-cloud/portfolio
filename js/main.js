@@ -341,7 +341,7 @@ function renderProjects(filter = 'all') {
     grid.addEventListener('scroll', pgInfiniteHandler, { passive: true });
   });
 
-  gsap.from(origCards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out' });
+  gsap.from(origCards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity' });
 }
 
 function initProjects() {

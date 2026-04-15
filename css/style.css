@@ -883,9 +883,10 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 .projects-grid {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
+  height: clamp(205px, 23.5vw, 315px); /* card height + small breathing room */
   gap: 1.25rem;
-  padding: 0.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem;
+  padding: 0 clamp(1.5rem, 5vw, 5rem);
   overflow-x: auto;
   scrollbar-width: none;
   cursor: grab;
