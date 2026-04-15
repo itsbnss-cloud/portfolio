@@ -431,6 +431,11 @@ function initLightbox() {
 
   close.addEventListener('click', closeLightbox);
 
+  // Click on empty space around slide image → close
+  reel.addEventListener('click', e => {
+    if (e.target === reel || e.target.classList.contains('lb-slide')) closeLightbox();
+  });
+
   // Keyboard
   document.addEventListener('keydown', e => {
     if (!lbProject) return;

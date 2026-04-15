@@ -1136,17 +1136,21 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 }
 
 .lb-close {
-  width: 40px; height: 40px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  width: 42px; height: 42px;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 50%;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.95);
   cursor: none;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.25s, color 0.25s, border-color 0.25s;
   pointer-events: all;
   -webkit-tap-highlight-color: transparent;
 }
+
+.lb-close svg { width: 18px; height: 18px; }
 
 .lb-close:hover { background: var(--y); border-color: var(--y); color: #000; }
 
@@ -1221,8 +1225,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 /* ── Mobile ── */
 @media (max-width: 600px) {
   .lb-topbar { padding: 1rem 1rem; }
-  .lb-close { width: 48px; height: 48px; } /* large touch target */
-  .lb-slide-img { max-width: 96vw; max-height: 68dvh; }
+  .lb-close { width: 48px; height: 48px; }
+  .lb-reel { gap: 0.5rem; padding-block: 8dvh; }
+  .lb-slide { height: 76dvh; }
+  .lb-slide-img { max-width: 96vw; max-height: 66dvh; }
 }
 
 /* ============================================================
