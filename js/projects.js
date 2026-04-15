@@ -101,5 +101,19 @@ const projects = [
       "assets/Ruspee's Menu Board/Plan de travail 2.jpg",
       "assets/Ruspee's Menu Board/Plan de travail 3.jpg"
     ]
+  },
+  {
+    id: 8,
+    title: "Dwich Corner",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/MENU BOARD Dwich Corner/SANDWICHS - test.jpg",
+    gallery: [
+      "assets/MENU BOARD Dwich Corner/SANDWICHS - test.jpg",
+      "assets/MENU BOARD Dwich Corner/BURGERS - ROLLS - test.jpg",
+      "assets/MENU BOARD Dwich Corner/TACOS - SIGNATURE - test.jpg",
+      "assets/MENU BOARD Dwich Corner/RIZ CROUSTY - test.jpg",
+      "assets/MENU BOARD Dwich Corner/DESSERTS - MENU ENFANTS - test.jpg"
+    ]
   }
 ];
