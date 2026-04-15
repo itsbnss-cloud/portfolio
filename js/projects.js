@@ -32,11 +32,11 @@ const projects = [
     title: "100% Braisé",
     category: "menu",
     tag: "Menu Board",
-    thumb: "assets/Braise-100-Menu-board/TV 1 – MENUS - 100% Braisé.jpg",
+    thumb: "assets/Braise-100-Menu-board/TV1-menus.jpg",
     gallery: [
-      "assets/Braise-100-Menu-board/TV 1 – MENUS - 100% Braisé.jpg",
-      "assets/Braise-100-Menu-board/TV 2 – À LA CARTE - 100% Braisé V2.jpg",
-      "assets/Braise-100-Menu-board/TV3 – Accompagnements & Sauces.jpg"
+      "assets/Braise-100-Menu-board/TV1-menus.jpg",
+      "assets/Braise-100-Menu-board/TV2-a-la-carte.jpg",
+      "assets/Braise-100-Menu-board/TV3-accompagnements.jpg"
     ]
   },
   {
