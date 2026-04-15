@@ -838,14 +838,13 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
   z-index: 1;
 }
 
-/* ── Projects grid layout ── */
+/* ── Projects horizontal strip ── */
 .projects-scroll-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem clamp(1.5rem, 4vw, 4rem) 5rem;
+  padding: 2rem 0 5rem;
+  overflow: hidden; /* hide scrollbar track */
 }
 
 .filter-bar {
@@ -883,13 +882,21 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 }
 
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0.5rem clamp(1.5rem, 5vw, 5rem) 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
 }
+.projects-grid::-webkit-scrollbar { display: none; }
+.projects-grid.is-dragging { cursor: grabbing; }
 
 .project-card {
-  width: 100%;
+  flex: 0 0 clamp(260px, 30vw, 400px);
+  scroll-snap-align: start;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
@@ -1340,8 +1347,8 @@ footer {
 
   .services-grid { max-width: 100%; }
 
-  .projects-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .project-card { width: 100%; }
+  .projects-grid { gap: 1rem; padding: 0.5rem 1.25rem 1rem; }
+  .project-card { flex: 0 0 78vw; }
   #projects { padding: 6rem 0 4rem; }
   .filter-bar { gap: 0.5rem; }
   .filter-btn { padding: 8px 14px; }

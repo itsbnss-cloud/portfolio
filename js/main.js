@@ -308,6 +308,7 @@ function renderProjects(filter = 'all') {
 
 function initProjects() {
   renderProjects();
+
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -315,6 +316,35 @@ function initProjects() {
       renderProjects(btn.dataset.filter);
     });
   });
+
+  // Drag-to-scroll on projects grid (desktop)
+  const grid = document.getElementById('projects-grid');
+  let pgDragging = false, pgStartX = 0, pgScrollLeft = 0, pgDragged = false;
+
+  grid.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    pgDragging   = true;
+    pgDragged    = false;
+    pgStartX     = e.clientX;
+    pgScrollLeft = grid.scrollLeft;
+    grid.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!pgDragging) return;
+    const dx = e.clientX - pgStartX;
+    if (Math.abs(dx) > 4) pgDragged = true;
+    grid.scrollLeft = pgScrollLeft - dx;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!pgDragging) return;
+    pgDragging = false;
+    grid.classList.remove('is-dragging');
+  });
+  // Suppress click on card after a drag
+  grid.addEventListener('click', e => {
+    if (pgDragged) { pgDragged = false; e.stopPropagation(); }
+  }, true);
 }
 
 /* ============================================================
