@@ -1,62 +1,105 @@
 const projects = [
+  // ── IDENTITÉ VISUELLE ──────────────────────────────────────
   {
     id: 1,
-    title: "Identité Café Nova",
+    title: "El Fakhama",
     category: "logo",
-    tag: "Logo & Identité",
-    color: "linear-gradient(135deg, #1a0a00, #3d1f00)",
-    accent: "#F5A623",
-    icon: "☕",
-    img: null
+    tag: "Identité Visuelle",
+    thumb: "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-01.jpg",
+    gallery: [
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-01.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-02.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-03.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-04.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-05.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-06.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-07.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-08.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-09.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-10.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-11.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-12.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-13.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-14.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-15.jpg",
+      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-16.jpg"
+    ]
   },
+
+  // ── MENU BOARDS ───────────────────────────────────────────
   {
     id: 2,
-    title: "Branding Studio Ink",
-    category: "logo",
-    tag: "Logo & Identité",
-    color: "linear-gradient(135deg, #000a1a, #001a3d)",
-    accent: "#4A9EFF",
-    icon: "✒️",
-    img: null
+    title: "100% Braisé",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/100% Braisé Menu board/TV 1 – MENUS - 100% Braisé.jpg",
+    gallery: [
+      "assets/100% Braisé Menu board/TV 1 – MENUS - 100% Braisé.jpg",
+      "assets/100% Braisé Menu board/TV 2 – À LA CARTE - 100% Braisé V2.jpg",
+      "assets/100% Braisé Menu board/TV3 – Accompagnements & Sauces.jpg"
+    ]
   },
   {
     id: 3,
-    title: "Menu Board Burger Co.",
+    title: "Bayk",
     category: "menu",
     tag: "Menu Board",
-    color: "linear-gradient(135deg, #0a1a00, #1a3d00)",
-    accent: "#7EC850",
-    icon: "🍔",
-    img: null
+    thumb: "assets/Bayk Menu board/Plan de travail 1.jpg",
+    gallery: [
+      "assets/Bayk Menu board/Plan de travail 1.jpg",
+      "assets/Bayk Menu board/Plan de travail 2.jpg",
+      "assets/Bayk Menu board/Plan de travail 3.jpg",
+      "assets/Bayk Menu board/Plan de travail 4.jpg"
+    ]
   },
   {
     id: 4,
-    title: "Menu Board Sushi Zen",
+    title: "Go Smash",
     category: "menu",
     tag: "Menu Board",
-    color: "linear-gradient(135deg, #1a001a, #3d003d)",
-    accent: "#E050E0",
-    icon: "🍣",
-    img: null
+    thumb: "assets/Go Smash Menu board/TV 1 — SMASH BURGERS.jpg",
+    gallery: [
+      "assets/Go Smash Menu board/TV 1 — SMASH BURGERS.jpg",
+      "assets/Go Smash Menu board/TV 2 — TRIPLES & GROS FORMATS.jpg",
+      "assets/Go Smash Menu board/TV 3 — LONGS SMASH + SMASH BOWL.jpg",
+      "assets/Go Smash Menu board/TV 4 — DESSERTS + EXTRAS.jpg"
+    ]
   },
   {
     id: 5,
-    title: "Flyer Festival Urbain",
-    category: "flyer",
-    tag: "Flyer",
-    color: "linear-gradient(135deg, #1a0000, #3d0000)",
-    accent: "#FF4A4A",
-    icon: "🎵",
-    img: null
+    title: "Krousty Factory",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/Krousty Factory Menu Board/MenuBoard - Riz crousty.jpg",
+    gallery: [
+      "assets/Krousty Factory Menu Board/MenuBoard - Riz crousty.jpg",
+      "assets/Krousty Factory Menu Board/MenuBoard - Accompagnement.jpg",
+      "assets/Krousty Factory Menu Board/MenuBoard - Sauce.jpg"
+    ]
   },
   {
     id: 6,
-    title: "Flyer Soirée Concept",
-    category: "flyer",
-    tag: "Flyer",
-    color: "linear-gradient(135deg, #001a1a, #003d3d)",
-    accent: "#4AFFEC",
-    icon: "🌙",
-    img: null
+    title: "Royal Kitchen",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/Royal kitchen Menu Board/TV 1 – Produits principaux_.jpg",
+    gallery: [
+      "assets/Royal kitchen Menu Board/TV 1 – Produits principaux_.jpg",
+      "assets/Royal kitchen Menu Board/TV 2 – Street Food.jpg",
+      "assets/Royal kitchen Menu Board/TV 3 – Riz - Tacos Bowl.jpg",
+      "assets/Royal kitchen Menu Board/TV 4 – Healthy & Plats.jpg"
+    ]
+  },
+  {
+    id: 7,
+    title: "Ruspee's",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/Ruspee's Menu Board/Plan de travail 1.jpg",
+    gallery: [
+      "assets/Ruspee's Menu Board/Plan de travail 1.jpg",
+      "assets/Ruspee's Menu Board/Plan de travail 2.jpg",
+      "assets/Ruspee's Menu Board/Plan de travail 3.jpg"
+    ]
   }
 ];

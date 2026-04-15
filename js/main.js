@@ -291,47 +291,152 @@ function renderProjects(filter = 'all') {
   const grid = document.getElementById('projects-grid');
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:13px;font-weight:600;">Bientôt disponible ✦</div>`;
+    return;
+  }
+
   grid.innerHTML = filtered.map(p => `
-    <div class="project-card" data-category="${p.category}">
-      ${p.img
-        ? `<img src="${p.img}" alt="${p.title}" class="project-card-img" loading="lazy" />`
-        : `<div class="project-bg" style="background:${p.color}">
-             <span style="filter:drop-shadow(0 4px 16px ${p.accent}40)">${p.icon}</span>
-           </div>`
-      }
+    <div class="project-card" data-id="${p.id}" style="cursor:none">
+      <img src="${p.thumb}" alt="${p.title}" class="project-card-img" loading="lazy" />
       <div class="project-overlay">
         <p class="project-tag">${p.tag}</p>
         <h3 class="project-title">${p.title}</h3>
+        ${p.gallery.length > 1 ? `<span class="project-count">${p.gallery.length} slides</span>` : ''}
       </div>
     </div>
   `).join('');
 
-  // Re-animate new cards
   gsap.from('.project-card', {
-    opacity: 0,
-    y: 30,
-    scale: 0.96,
-    duration: 0.5,
-    stagger: 0.08,
-    ease: 'power2.out'
+    opacity: 0, y: 30, scale: 0.96,
+    duration: 0.5, stagger: 0.08, ease: 'power2.out'
   });
 
-  // Re-attach cursor hover
   grid.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    card.addEventListener('click', () => {
+      const project = projects.find(p => p.id === parseInt(card.dataset.id));
+      if (project) openLightbox(project);
+    });
   });
 }
 
 function initProjects() {
   renderProjects();
-
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderProjects(btn.dataset.filter);
     });
+  });
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+let lbIndex = 0;
+let lbProject = null;
+
+function openLightbox(project) {
+  lbProject = project;
+  lbIndex   = 0;
+
+  const lb      = document.getElementById('lightbox');
+  const img     = lb.querySelector('.lb-img');
+  const title   = lb.querySelector('.lb-title');
+  const tag     = lb.querySelector('.lb-tag');
+
+  title.textContent = project.title;
+  tag.textContent   = project.tag;
+
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  renderLbSlide();
+  renderLbDots();
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  lbProject = null;
+}
+
+function renderLbSlide() {
+  const lb  = document.getElementById('lightbox');
+  const img = lb.querySelector('.lb-img');
+  const counter = lb.querySelector('.lb-counter');
+
+  img.classList.add('fade');
+  setTimeout(() => {
+    img.src = lbProject.gallery[lbIndex];
+    img.alt = lbProject.title;
+    img.classList.remove('fade');
+    counter.textContent = `${lbIndex + 1} / ${lbProject.gallery.length}`;
+    lb.querySelectorAll('.lb-dot').forEach((d, i) => d.classList.toggle('active', i === lbIndex));
+  }, 180);
+}
+
+function renderLbDots() {
+  const lb   = document.getElementById('lightbox');
+  const dots = lb.querySelector('.lb-dots');
+  dots.innerHTML = lbProject.gallery.map((_, i) =>
+    `<span class="lb-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`
+  ).join('');
+
+  dots.querySelectorAll('.lb-dot').forEach(d => {
+    d.addEventListener('click', () => { lbIndex = parseInt(d.dataset.i); renderLbSlide(); });
+  });
+}
+
+function initLightbox() {
+  const lb   = document.getElementById('lightbox');
+  const prev = lb.querySelector('.lb-prev');
+  const next = lb.querySelector('.lb-next');
+  const close = lb.querySelector('.lb-close');
+
+  close.addEventListener('click', closeLightbox);
+  lb.querySelector('.lb-backdrop').addEventListener('click', closeLightbox);
+
+  prev.addEventListener('click', () => {
+    if (!lbProject) return;
+    lbIndex = (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length;
+    renderLbSlide();
+  });
+
+  next.addEventListener('click', () => {
+    if (!lbProject) return;
+    lbIndex = (lbIndex + 1) % lbProject.gallery.length;
+    renderLbSlide();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lbProject) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  { lbIndex = (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length; renderLbSlide(); }
+    if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbProject.gallery.length; renderLbSlide(); }
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50 && lbProject) {
+      lbIndex = diff > 0
+        ? (lbIndex + 1) % lbProject.gallery.length
+        : (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length;
+      renderLbSlide();
+    }
+  });
+
+  // Cursor hover on lightbox buttons
+  [prev, next, close, lb.querySelector('.lb-backdrop')].forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   });
 }
 
@@ -372,5 +477,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initMagnetic();
   initProjects();
+  initLightbox();
   initForm();
 });

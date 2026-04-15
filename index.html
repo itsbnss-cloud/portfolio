@@ -176,6 +176,7 @@
         <button class="filter-btn" data-filter="logo">Logo &amp; ID</button>
         <button class="filter-btn" data-filter="menu">Menu Board</button>
         <button class="filter-btn" data-filter="flyer">Flyer</button>
+        <!-- Flyer à venir -->
       </div>
       <div class="projects-grid" id="projects-grid"></div>
     </div>
@@ -241,6 +242,25 @@
       </div>
     </div>
   </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <div class="lb-backdrop"></div>
+    <div class="lb-box">
+      <button class="lb-close" aria-label="Fermer">✕</button>
+      <div class="lb-header">
+        <span class="lb-tag"></span>
+        <h3 class="lb-title"></h3>
+      </div>
+      <div class="lb-img-wrap">
+        <img class="lb-img" src="" alt="" />
+        <button class="lb-prev" aria-label="Précédent">‹</button>
+        <button class="lb-next" aria-label="Suivant">›</button>
+      </div>
+      <div class="lb-dots"></div>
+      <p class="lb-counter"></p>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
