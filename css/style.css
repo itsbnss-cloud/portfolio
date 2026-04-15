@@ -1165,7 +1165,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   align-items: center;
   /* padding = (100 - slide-height) / 2 so first/last slide can center-snap */
   padding-block: 18dvh;
-  gap: 4px;
+  gap: 0;
 }
 
 .lb-reel::-webkit-scrollbar { display: none; }
