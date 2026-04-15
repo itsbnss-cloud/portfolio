@@ -1075,7 +1075,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 #lightbox {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1003;
   background: #000;
   pointer-events: none;
   opacity: 0;
