@@ -1,316 +1,550 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jeune Designer — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeune Designer — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- ===== LOADER ===== -->
+    <div id="loader">
+      <img
+        src="assets/Fichier 5Jeune designer logo.png"
+        alt="JD"
+        class="loader-logo"
+      />
+      <div class="loader-bar">
+        <div class="loader-fill" id="loader-fill"></div>
+      </div>
+    </div>
 
-  <!-- ===== LOADER ===== -->
-  <div id="loader">
-    <img src="assets/Fichier 5Jeune designer logo.png" alt="JD" class="loader-logo" />
-    <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
-  </div>
+    <!-- ===== CURSOR ===== -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
-  <!-- ===== CURSOR ===== -->
-  <div id="cursor-dot"></div>
-  <div id="cursor-ring"></div>
+    <!-- ===== NAV ===== -->
+    <nav id="nav">
+      <div class="nav-container">
+        <a href="#hero" class="nav-brand">
+          <img
+            src="assets/Fichier 5Jeune designer logo.png"
+            alt="JD"
+            class="nav-jd"
+          />
+          <span class="nav-studio">Studio</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#about" class="nav-link">À propos</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#projects" class="nav-link">Projets</a></li>
+          <li><a href="#contact" class="nav-link nav-cta">Contact</a></li>
+        </ul>
+        <button class="nav-burger" id="burger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
 
-  <!-- ===== NAV ===== -->
-  <nav id="nav">
-    <div class="nav-container">
-      <a href="#hero" class="nav-brand">
-        <img src="assets/Fichier 5Jeune designer logo.png" alt="JD" class="nav-jd" />
-        <span class="nav-studio">Studio</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#about"    class="nav-link">À propos</a></li>
-        <li><a href="#services" class="nav-link">Services</a></li>
-        <li><a href="#projects" class="nav-link">Projets</a></li>
-        <li><a href="#contact"  class="nav-link nav-cta">Contact</a></li>
+    <!-- Mobile menu -->
+    <div id="mobile-menu">
+      <ul>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-      <button class="nav-burger" id="burger" aria-label="Menu">
-        <span></span><span></span><span></span>
+      <div class="mobile-menu-socials">
+        <a
+          href="https://www.behance.net/ibrahimbousaad2"
+          class="social-link"
+          aria-label="Behance"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr"
+          class="social-link"
+          aria-label="Instagram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq"
+          class="social-link"
+          aria-label="TikTok"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section id="hero">
+      <div class="hero-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+      </div>
+      <div class="hero-container">
+        <div class="hero-left">
+          <div class="hero-tag">
+            <span class="blink-dot"></span>
+            Graphiste &amp; Designer
+          </div>
+          <img
+            src="assets/Fichier 4Jeune designer logo.png"
+            alt="Jeune Designer"
+            class="hero-wordmark"
+          />
+          <p class="hero-sub">
+            Je crée des univers visuels complets<br />pour des marques qui
+            veulent marquer.
+          </p>
+          <div class="hero-btns">
+            <a href="#projects" class="btn-primary">Voir mes projets</a>
+            <a href="#contact" class="btn-ghost">Me contacter</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <img
+            src="assets/Fichier 6Jeune designer logo.png"
+            alt=""
+            class="hero-character"
+          />
+        </div>
+      </div>
+      <div class="hero-scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-visual" data-reveal="left">
+            <div class="about-img-wrap">
+              <img
+                src="assets/Fichier 6Jeune designer logo.png"
+                alt="Jeune Designer"
+                class="about-character"
+              />
+              <div class="about-badge-float">
+                <span class="badge-num">2+</span>
+                <span class="badge-txt">ans d'expérience</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-content" data-reveal="right">
+            <p class="section-tag">À propos</p>
+            <h2 class="section-title">
+              Un jeune designer<br /><em>passionné &amp; créatif</em>
+            </h2>
+            <p class="about-text">
+              Graphiste designer, je conçois des univers visuels complets pour
+              des marques qui veulent se démarquer.<br />J'allie créativité et
+              réflexion pour créer des visuels justes, cohérents et pensés pour
+              durer.
+            </p>
+            <div class="about-stats">
+              <div class="stat">
+                <span class="stat-num" data-target="20">0</span
+                ><span class="stat-plus">+</span>
+                <span class="stat-label">Projets réalisés</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num" data-target="15">0</span
+                ><span class="stat-plus">+</span>
+                <span class="stat-label">Clients satisfaits</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num" data-target="100">0</span
+                ><span class="stat-plus">%</span>
+                <span class="stat-label">Satisfaction client</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="services">
+      <div class="container">
+        <div class="section-header" data-reveal="up">
+          <p class="section-tag">Services</p>
+          <h2 class="section-title">Ce que je <em>crée pour vous</em></h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-number">01</div>
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                />
+              </svg>
+            </div>
+            <h3>Identité &amp; Branding</h3>
+            <p>
+              Création d'univers de marque complets : logo, direction
+              artistique, charte graphique et identité visuelle.
+            </p>
+            <div class="service-tags">
+              <span>Logo</span><span>DA</span><span>Branding</span>
+            </div>
+            <div class="service-arrow">→</div>
+          </div>
+          <div class="service-card service-card--featured">
+            <div class="service-number">02</div>
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
+            </div>
+            <h3>Supports &amp; Visuels</h3>
+            <p>
+              Conception de supports de communication : menu boards, flyers,
+              affiches, contenus digitaux et publicitaires.
+            </p>
+            <div class="service-tags">
+              <span>Menu Board</span><span>Flyer</span><span>Digital</span>
+            </div>
+            <div class="service-arrow">→</div>
+          </div>
+          <div class="service-card">
+            <div class="service-number">03</div>
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path
+                  d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                />
+              </svg>
+            </div>
+            <h3>Expérience &amp; Univers</h3>
+            <p>
+              Création d'un univers visuel global : packaging, visuels muraux,
+              ambiance graphique et cohérence de marque.
+            </p>
+            <div class="service-tags">
+              <span>Packaging</span><span>Ambiance</span><span>Cohérence</span>
+            </div>
+            <div class="service-arrow">→</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects">
+      <div class="container">
+        <div class="section-header" data-reveal="up">
+          <p class="section-tag">Réalisations</p>
+          <h2 class="section-title">Mes derniers <em>projets</em></h2>
+        </div>
+        <div class="filter-bar" data-reveal="up">
+          <button class="filter-btn active" data-filter="all">Tout</button>
+          <button class="filter-btn" data-filter="logo">Logo &amp; ID</button>
+          <button class="filter-btn" data-filter="menu">Menu Board</button>
+          <button class="filter-btn" data-filter="flyer">Flyer</button>
+          <!-- Flyer à venir -->
+        </div>
+      </div><!-- /.container -->
+      <div class="projects-carousel-wrap">
+        <div class="carousel-outer">
+          <button class="car-btn car-prev" id="car-prev" aria-label="Précédent">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="15,18 9,12 15,6" />
+            </svg>
+          </button>
+          <div class="carousel-viewport" id="carousel-viewport">
+            <div class="projects-grid" id="projects-grid"></div>
+          </div>
+          <button class="car-btn car-next" id="car-next" aria-label="Suivant">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="9,18 15,12 9,6" />
+            </svg>
+          </button>
+        </div>
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div><!-- /.projects-carousel-wrap -->
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-wrap">
+          <div class="contact-left" data-reveal="left">
+            <p class="section-tag">Contact</p>
+            <h2 class="section-title">Travaillons<br /><em>Ensemble</em></h2>
+            <p class="contact-text">
+              Un projet en tête ? Je serais ravi d'en discuter. Remplis le
+              formulaire ou contacte-moi directement.
+            </p>
+            <div class="contact-socials">
+              <a
+                href="https://www.behance.net/ibrahimbousaad2"
+                class="social-link"
+                aria-label="Behance"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr"
+                class="social-link"
+                aria-label="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq"
+                class="social-link"
+                aria-label="TikTok"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="contact-right" data-reveal="right">
+            <form class="contact-form" id="contact-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nom</label>
+                  <input type="text" placeholder="Votre nom" required />
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="votre@email.com" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Sujet</label>
+                <input
+                  type="text"
+                  placeholder="Logo, Menu Board, Flyer..."
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Message</label>
+                <textarea
+                  placeholder="Décrivez votre projet..."
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="btn-primary btn-full">
+                <span>Envoyer le message</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12,5 19,12 12,19" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <img
+            src="assets/Fichier 5Jeune designer logo.png"
+            alt="JD"
+            class="footer-logo"
+          />
+          <div class="footer-socials">
+            <a
+              href="https://www.behance.net/ibrahimbousaad2"
+              class="social-link"
+              aria-label="Behance"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr"
+              class="social-link"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq"
+              class="social-link"
+              aria-label="TikTok"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"
+                />
+              </svg>
+            </a>
+          </div>
+          <p class="footer-copy">
+            © 2025 Jeune Designer Studio. Tous droits réservés.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+      <div class="lb-backdrop"></div>
+
+      <!-- Floating meta — top left -->
+      <div class="lb-meta">
+        <span class="lb-tag"></span>
+        <h3 class="lb-title"></h3>
+      </div>
+
+      <!-- Close — top right -->
+      <button class="lb-close" aria-label="Fermer">✕</button>
+
+      <!-- Image — centre -->
+      <div class="lb-viewport">
+        <img class="lb-img" src="" alt="" />
+      </div>
+
+      <!-- Arrows — edges -->
+      <button class="lb-prev" aria-label="Précédent">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15,18 9,12 15,6" />
+        </svg>
       </button>
-    </div>
-  </nav>
+      <button class="lb-next" aria-label="Suivant">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9,18 15,12 9,6" />
+        </svg>
+      </button>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu">
-    <ul>
-      <li><a href="#about">À propos</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#projects">Projets</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="mobile-menu-socials">
-      <a href="https://www.behance.net/ibrahimbousaad2" class="social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      </a>
-      <a href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"/></svg>
-      </a>
-    </div>
-  </div>
+      <!-- Dots — bottom centre -->
+      <div class="lb-dots"></div>
 
-  <!-- ===== HERO ===== -->
-  <section id="hero">
-    <div class="hero-orbs">
-      <div class="orb orb1"></div>
-      <div class="orb orb2"></div>
-      <div class="orb orb3"></div>
-    </div>
-    <div class="hero-container">
-      <div class="hero-left">
-        <div class="hero-tag">
-          <span class="blink-dot"></span>
-          Graphiste &amp; Designer
-        </div>
-        <img src="assets/Fichier 4Jeune designer logo.png" alt="Jeune Designer" class="hero-wordmark" />
-        <p class="hero-sub">Je crée des univers visuels complets<br>pour des marques qui veulent marquer.</p>
-        <div class="hero-btns">
-          <a href="#projects" class="btn-primary">Voir mes projets</a>
-          <a href="#contact"  class="btn-ghost">Me contacter</a>
-        </div>
-      </div>
-      <div class="hero-right">
-        <img src="assets/Fichier 6Jeune designer logo.png" alt="" class="hero-character" />
-      </div>
-    </div>
-    <div class="hero-scroll-hint">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- ===== ABOUT ===== -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual" data-reveal="left">
-          <div class="about-img-wrap">
-            <img src="assets/Fichier 6Jeune designer logo.png" alt="Jeune Designer" class="about-character" />
-            <div class="about-badge-float">
-              <span class="badge-num">2+</span>
-              <span class="badge-txt">ans d'expérience</span>
-            </div>
-          </div>
-        </div>
-        <div class="about-content" data-reveal="right">
-          <p class="section-tag">À propos</p>
-          <h2 class="section-title">Un jeune designer<br><em>passionné &amp; créatif</em></h2>
-          <p class="about-text">Graphiste designer, je conçois des univers visuels complets pour des marques qui veulent se démarquer.<br>J'allie créativité et réflexion pour créer des visuels justes, cohérents et pensés pour durer.</p>
-          <div class="about-stats">
-            <div class="stat">
-              <span class="stat-num" data-target="20">0</span><span class="stat-plus">+</span>
-              <span class="stat-label">Projets réalisés</span>
-            </div>
-            <div class="stat">
-              <span class="stat-num" data-target="15">0</span><span class="stat-plus">+</span>
-              <span class="stat-label">Clients satisfaits</span>
-            </div>
-            <div class="stat">
-              <span class="stat-num" data-target="100">0</span><span class="stat-plus">%</span>
-              <span class="stat-label">Satisfaction client</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== SERVICES ===== -->
-  <section id="services">
-    <div class="container">
-      <div class="section-header" data-reveal="up">
-        <p class="section-tag">Services</p>
-        <h2 class="section-title">Ce que je <em>crée pour vous</em></h2>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-number">01</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          </div>
-          <h3>Identité &amp; Branding</h3>
-          <p>Création d'univers de marque complets : logo, direction artistique, charte graphique et identité visuelle.</p>
-          <div class="service-tags">
-            <span>Logo</span><span>DA</span><span>Branding</span>
-          </div>
-          <div class="service-arrow">→</div>
-        </div>
-        <div class="service-card service-card--featured">
-          <div class="service-number">02</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <h3>Supports &amp; Visuels</h3>
-          <p>Conception de supports de communication : menu boards, flyers, affiches, contenus digitaux et publicitaires.</p>
-          <div class="service-tags">
-            <span>Menu Board</span><span>Flyer</span><span>Digital</span>
-          </div>
-          <div class="service-arrow">→</div>
-        </div>
-        <div class="service-card">
-          <div class="service-number">03</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <h3>Expérience &amp; Univers</h3>
-          <p>Création d'un univers visuel global : packaging, visuels muraux, ambiance graphique et cohérence de marque.</p>
-          <div class="service-tags">
-            <span>Packaging</span><span>Ambiance</span><span>Cohérence</span>
-          </div>
-          <div class="service-arrow">→</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROJECTS ===== -->
-  <section id="projects">
-    <div class="container">
-      <div class="section-header" data-reveal="up">
-        <p class="section-tag">Réalisations</p>
-        <h2 class="section-title">Mes derniers <em>projets</em></h2>
-      </div>
-      <div class="filter-bar" data-reveal="up">
-        <button class="filter-btn active" data-filter="all">Tout</button>
-        <button class="filter-btn" data-filter="logo">Logo &amp; ID</button>
-        <button class="filter-btn" data-filter="menu">Menu Board</button>
-        <button class="filter-btn" data-filter="flyer">Flyer</button>
-        <!-- Flyer à venir -->
-      </div>
-      <div class="carousel-outer">
-        <button class="car-btn car-prev" id="car-prev" aria-label="Précédent">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-        </button>
-        <div class="carousel-viewport" id="carousel-viewport">
-          <div class="projects-grid" id="projects-grid"></div>
-        </div>
-        <button class="car-btn car-next" id="car-next" aria-label="Suivant">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
-        </button>
-      </div>
-      <div class="carousel-dots" id="carousel-dots"></div>
-    </div>
-  </section>
-
-  <!-- ===== CONTACT ===== -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-wrap">
-        <div class="contact-left" data-reveal="left">
-          <p class="section-tag">Contact</p>
-          <h2 class="section-title">Travaillons<br><em>ensemble</em></h2>
-          <p class="contact-text">Un projet en tête ? Je serais ravi d'en discuter. Remplis le formulaire ou contacte-moi directement.</p>
-          <div class="contact-socials">
-            <a href="https://www.behance.net/ibrahimbousaad2" class="social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="contact-right" data-reveal="right">
-          <form class="contact-form" id="contact-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Nom</label>
-                <input type="text" placeholder="Votre nom" required />
-              </div>
-              <div class="form-group">
-                <label>Email</label>
-                <input type="email" placeholder="votre@email.com" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Sujet</label>
-              <input type="text" placeholder="Logo, Menu Board, Flyer..." required />
-            </div>
-            <div class="form-group">
-              <label>Message</label>
-              <textarea placeholder="Décrivez votre projet..." rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn-primary btn-full">
-              <span>Envoyer le message</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <img src="assets/Fichier 5Jeune designer logo.png" alt="JD" class="footer-logo" />
-        <div class="footer-socials">
-          <a href="https://www.behance.net/ibrahimbousaad2" class="social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.803 5.731c.589 0 1.119.051 1.605.155.483.103.895.273 1.243.508.343.235.611.547.804.938.187.387.28.855.28 1.4 0 .6-.136 1.102-.408 1.504-.27.4-.674.733-1.215.994.737.214 1.29.59 1.656 1.126.363.537.548 1.185.548 1.94 0 .6-.115 1.118-.35 1.558-.231.44-.548.804-.953 1.088-.4.28-.863.489-1.39.622-.524.13-1.073.197-1.648.197H1V5.731h6.803zm-.351 4.972c.48 0 .878-.114 1.192-.34.31-.227.463-.588.463-1.084 0-.27-.05-.497-.152-.675-.1-.18-.235-.325-.41-.436-.171-.108-.37-.184-.598-.231-.224-.046-.46-.068-.71-.068H3.9v2.834h3.552zm.19 5.19c.282 0 .546-.028.79-.084.247-.057.462-.147.646-.27.186-.126.333-.294.44-.504.108-.21.162-.475.162-.796 0-.634-.178-1.09-.535-1.366-.358-.277-.833-.414-1.425-.414H3.9v3.434h3.742zM20.498 17.19c-.389.39-.85.696-1.383.919-.534.223-1.106.334-1.716.334-.64 0-1.223-.108-1.748-.325-.527-.217-.977-.524-1.35-.92-.374-.398-.664-.876-.869-1.432-.206-.556-.31-1.17-.31-1.843 0-.652.104-1.254.31-1.806.207-.554.497-1.03.871-1.428.374-.398.822-.706 1.344-.922.524-.218 1.1-.326 1.732-.326.672 0 1.255.12 1.748.358.496.237.905.557 1.228.957.322.4.557.866.703 1.397.146.53.22 1.088.22 1.674v.54H16.27c.05.656.275 1.162.672 1.518.397.357.886.535 1.468.535.48 0 .888-.104 1.224-.312.335-.208.638-.473.908-.796l.956.877zm-1.527-4.228c-.01-.558-.175-1.018-.497-1.38-.322-.362-.773-.543-1.354-.543-.318 0-.594.056-.83.168-.232.113-.428.26-.587.44-.159.18-.28.386-.363.617-.083.23-.127.466-.13.698h3.761zM21.5 7.434h-5.438V6h5.438v1.434z"/></svg>
-          </a>
-          <a href="https://www.instagram.com/jeune.designerr?igsh=MWJtOGRoMmx6ZHptZg%3D%3D&utm_source=qr" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="https://www.tiktok.com/@jeune.designer?_r=1&_t=ZS-95XyMPE94Kq" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.28 8.28 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z"/></svg>
-          </a>
-        </div>
-        <p class="footer-copy">© 2025 Jeune Designer Studio. Tous droits réservés.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- LIGHTBOX -->
-  <div id="lightbox">
-    <div class="lb-backdrop"></div>
-
-    <!-- Floating meta — top left -->
-    <div class="lb-meta">
-      <span class="lb-tag"></span>
-      <h3 class="lb-title"></h3>
+      <!-- Counter — bottom right -->
+      <p class="lb-counter"></p>
     </div>
 
-    <!-- Close — top right -->
-    <button class="lb-close" aria-label="Fermer">✕</button>
-
-    <!-- Image — centre -->
-    <div class="lb-viewport">
-      <img class="lb-img" src="" alt="" />
-    </div>
-
-    <!-- Arrows — edges -->
-    <button class="lb-prev" aria-label="Précédent">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-    </button>
-    <button class="lb-next" aria-label="Suivant">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
-    </button>
-
-    <!-- Dots — bottom centre -->
-    <div class="lb-dots"></div>
-
-    <!-- Counter — bottom right -->
-    <p class="lb-counter"></p>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="js/projects.js"></script>
-  <script src="js/main.js"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

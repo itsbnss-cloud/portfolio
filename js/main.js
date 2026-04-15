@@ -276,9 +276,8 @@ let carIndex = 0;
 const CAR_GAP = 24; // 1.5rem
 
 function getCardsPerView() {
-  if (window.innerWidth < 600) return 1;
-  if (window.innerWidth < 900) return 2;
-  return 3;
+  if (window.innerWidth < 768) return 1;
+  return 2;
 }
 
 function updateCarousel(animate = true) {
