@@ -888,7 +888,7 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 }
 
 .project-card {
-  width: min(700px, 92vw);
+  width: min(960px, 92vw);
   border-radius: 20px;
   overflow: hidden;
   position: relative;
