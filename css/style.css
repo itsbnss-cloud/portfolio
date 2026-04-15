@@ -128,7 +128,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 #nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 100;
+  z-index: 1002;
   padding: 1.25rem 2rem;
   transition: background var(--transition), padding var(--transition), border-color var(--transition);
   border-bottom: 1px solid transparent;
@@ -239,7 +239,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 #mobile-menu {
   position: fixed;
   inset: 0;
-  z-index: 99;
+  z-index: 1001;
   background: rgba(8,8,8,0.97);
   display: flex;
   align-items: center;
@@ -753,8 +753,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 }
 
 .service-icon svg { width: 20px; height: 20px; color: var(--y); }
+.service-icon img { width: 22px; height: 22px; object-fit: contain; filter: brightness(0) saturate(100%) invert(68%) sepia(86%) saturate(401%) hue-rotate(357deg) brightness(102%) contrast(94%); }
 .service-card:hover .service-icon { background: var(--y); transform: rotate(8deg); }
 .service-card:hover .service-icon svg { color: #000; }
+.service-card:hover .service-icon img { filter: brightness(0); }
 
 .service-card h3 {
   font-family: 'Moga', 'Montserrat', sans-serif;
@@ -831,12 +833,20 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   z-index: 1;
 }
 
-/* ── Full-width carousel wrapper ── */
-.projects-carousel-wrap {
+/* ── Scroll-based project navigation ── */
+.projects-scroll-wrap {
   position: relative;
   z-index: 1;
-  padding: 2rem clamp(1.5rem, 5vw, 5rem) 0;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: clamp(1.5rem, 5vw, 5rem);
 }
+
+.projects-scroll-wrap::-webkit-scrollbar { display: none; }
 
 .filter-bar {
   display: flex;
@@ -872,73 +882,16 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   box-shadow: 0 4px 16px var(--y-glow);
 }
 
-/* ── Carousel ── */
-.carousel-outer {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.carousel-viewport {
-  overflow: hidden;
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-}
-
 .projects-grid {
   display: flex;
   gap: 1.5rem;
-  will-change: transform;
-}
-
-.car-btn {
-  flex-shrink: 0;
-  width: 46px; height: 46px;
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  color: var(--muted2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: none;
-  transition: background 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s, transform 0.2s;
-}
-
-.car-btn:hover:not(:disabled) {
-  background: var(--y);
-  border-color: var(--y);
-  color: #000;
-  transform: scale(1.06);
-}
-
-.car-btn:disabled { opacity: 0.2; pointer-events: none; }
-
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 7px;
-  margin-top: 2rem;
-}
-
-.carousel-dot {
-  width: 6px; height: 6px;
-  border-radius: 3px;
-  background: #2a2a2a;
-  cursor: none;
-  border: none;
-  padding: 0;
-  transition: background 0.3s, width 0.3s;
-}
-
-.carousel-dot.active {
-  background: var(--y);
-  width: 22px;
+  padding: 2rem clamp(1.5rem, 5vw, 5rem);
 }
 
 .project-card {
+  flex-shrink: 0;
+  width: clamp(280px, 42vw, 520px);
+  scroll-snap-align: start;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
@@ -1354,10 +1307,6 @@ footer {
 
   .services-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
 
-  .carousel-outer { gap: 0.85rem; }
-  .car-btn { width: 40px; height: 40px; }
-  .projects-carousel-wrap { padding: 2rem 1.5rem 0; }
-
   .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
   .form-row { grid-template-columns: 1fr; }
 
@@ -1386,9 +1335,7 @@ footer {
 
   .services-grid { max-width: 100%; }
 
-  .car-btn { width: 36px; height: 36px; }
-  .car-btn.car-prev, .car-btn.car-next { display: none; }
-  .projects-carousel-wrap { padding: 1.75rem 0 0; }
+  .project-card { width: 82vw; }
   #projects { padding: 6rem 0 5rem; }
   .filter-bar { gap: 0.5rem; }
   .filter-btn { padding: 8px 14px; }
@@ -1401,8 +1348,7 @@ footer {
   #cursor-dot, #cursor-ring { display: none; }
   body { cursor: auto; }
   .nav-burger, .btn-primary, .btn-ghost, .filter-btn, .service-card, .project-card,
-  .social-link, .nav-brand, .nav-cta, .lb-close, .lb-prev, .lb-next,
-  .car-btn, .carousel-dot { cursor: pointer; }
+  .social-link, .nav-brand, .nav-cta, .lb-close, .lb-prev, .lb-next { cursor: pointer; }
   .lb-close, .lb-prev, .lb-next { cursor: pointer; }
 }
 
