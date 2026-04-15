@@ -1244,9 +1244,11 @@ footer {
   .hero-right { order: -1; }
   .hero-character { width: 200px; }
 
+  .hero-scroll-hint { display: none; }
+
   .about-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
   .about-badge-float { right: 0; }
-  .about-stats { justify-content: center; flex-wrap: wrap; }
+  .about-stats { justify-content: center; flex-wrap: wrap; width: 100%; }
   .section-tag { justify-content: center; }
   .section-tag::before { display: none; }
 
