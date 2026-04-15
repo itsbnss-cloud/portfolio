@@ -272,15 +272,30 @@ function initMagnetic() {
 /* ============================================================
    PROJECTS GRID
    ============================================================ */
+let pgInfiniteHandler = null;
+
+function attachCardEvents(card) {
+  card.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  card.addEventListener('click', () => {
+    const project = projects.find(p => p.id === parseInt(card.dataset.id));
+    if (project) openLightbox(project);
+  });
+}
+
 function renderProjects(filter = 'all') {
   const grid     = document.getElementById('projects-grid');
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+
+  // Remove previous infinite scroll listener
+  if (pgInfiniteHandler) { grid.removeEventListener('scroll', pgInfiniteHandler); pgInfiniteHandler = null; }
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div style="padding:3rem;color:var(--muted);font-size:13px;font-weight:600;">Bientôt disponible ✦</div>`;
     return;
   }
 
+  // Render original cards
   grid.innerHTML = filtered.map(p => `
     <div class="project-card" data-id="${p.id}">
       <img src="${p.thumb}" alt="${p.title}" class="project-card-img" loading="lazy" />
@@ -294,16 +309,39 @@ function renderProjects(filter = 'all') {
     </div>
   `).join('');
 
-  grid.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    card.addEventListener('click', () => {
-      const project = projects.find(p => p.id === parseInt(card.dataset.id));
-      if (project) openLightbox(project);
+  grid.querySelectorAll('.project-card').forEach(attachCardEvents);
+
+  // Infinite scroll — clone set before + after
+  const origCards = [...grid.querySelectorAll('.project-card')];
+
+  function makeCloneSet() {
+    const frag = document.createDocumentFragment();
+    origCards.forEach(card => {
+      const cl = card.cloneNode(true);
+      cl.setAttribute('aria-hidden', 'true');
+      attachCardEvents(cl);
+      frag.appendChild(cl);
     });
+    return frag;
+  }
+
+  grid.appendChild(makeCloneSet());  // clone B at end
+  grid.prepend(makeCloneSet());      // clone A at start
+
+  // Start at original set (skip clone A)
+  requestAnimationFrame(() => {
+    const setW = grid.scrollWidth / 3;
+    grid.scrollLeft = setW;
+
+    pgInfiniteHandler = () => {
+      const sw = grid.scrollWidth / 3;
+      if (grid.scrollLeft >= sw * 2) grid.scrollLeft -= sw;
+      else if (grid.scrollLeft <= 0)  grid.scrollLeft += sw;
+    };
+    grid.addEventListener('scroll', pgInfiniteHandler, { passive: true });
   });
 
-  gsap.from('.project-card', { opacity: 0, y: 24, duration: 0.5, stagger: 0.08, ease: 'power2.out' });
+  gsap.from(origCards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out' });
 }
 
 function initProjects() {
