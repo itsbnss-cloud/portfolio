@@ -843,8 +843,7 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
   position: relative;
   z-index: 1;
   width: 100%;
-  padding: 2rem 0 5rem;
-  overflow: hidden; /* hide scrollbar track */
+  padding: 2rem 0 0;
 }
 
 .filter-bar {
@@ -884,8 +883,9 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 .projects-grid {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 1.25rem;
-  padding: 0.5rem clamp(1.5rem, 5vw, 5rem) 1rem;
+  padding: 0.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -893,6 +893,34 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
 }
 .projects-grid::-webkit-scrollbar { display: none; }
 .projects-grid.is-dragging { cursor: grabbing; }
+
+/* ── Projects nav arrows ── */
+.projects-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.75rem 0 4rem;
+}
+
+.projects-nav-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid #2a2a2a;
+  background: transparent;
+  color: var(--muted2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: none;
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+.projects-nav-btn:hover {
+  border-color: var(--y);
+  color: var(--y);
+}
+.projects-nav-btn:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
 
 .project-card {
   flex: 0 0 clamp(260px, 30vw, 400px);

@@ -317,8 +317,28 @@ function initProjects() {
     });
   });
 
-  // Drag-to-scroll on projects grid (desktop)
+  // Arrow nav buttons
   const grid = document.getElementById('projects-grid');
+  const prevBtn = document.getElementById('proj-prev');
+  const nextBtn = document.getElementById('proj-next');
+
+  function scrollByCard(dir) {
+    const card = grid.querySelector('.project-card');
+    if (!card) return;
+    const step = card.offsetWidth + 20; // card width + gap
+    grid.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }
+
+  prevBtn.addEventListener('click', () => scrollByCard(-1));
+  nextBtn.addEventListener('click', () => scrollByCard(1));
+
+  // cursor-hover on nav buttons
+  [prevBtn, nextBtn].forEach(btn => {
+    btn.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    btn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // Drag-to-scroll on projects grid (desktop)
   let pgDragging = false, pgStartX = 0, pgScrollLeft = 0, pgDragged = false;
 
   grid.addEventListener('mousedown', e => {
