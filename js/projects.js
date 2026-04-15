@@ -1,119 +1,94 @@
 const projects = [
-  // ── IDENTITÉ VISUELLE ──────────────────────────────────────
+
   {
     id: 1,
-    title: "El Fakhama",
-    category: "logo",
-    tag: "Identité Visuelle",
-    thumb: "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-01.jpg",
+    title: "BAKE",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/travaux/BAKE/PP - Bayk.jpg",
     gallery: [
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-01.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-02.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-03.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-04.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-05.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-06.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-07.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-08.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-09.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-10.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-11.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-12.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-13.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-14.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-15.jpg",
-      "assets/Fakhama JPEG Identité visuel/Charte graphique - El Fakhama-16.jpg"
+      "assets/travaux/BAKE/PP - Bayk.jpg",
+      "assets/travaux/BAKE/MB 1 - Bayk.jpg",
+      "assets/travaux/BAKE/MB 2 - Bayk.jpg",
+      "assets/travaux/BAKE/MB 3 - Bayk.jpg",
+      "assets/travaux/BAKE/MB 4 - Bayk.jpg"
     ]
   },
 
-  // ── MENU BOARDS ───────────────────────────────────────────
   {
     id: 2,
-    title: "100% Braisé",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Braise-100-Menu-board/TV1-menus.jpg",
-    gallery: [
-      "assets/Braise-100-Menu-board/TV1-menus.jpg",
-      "assets/Braise-100-Menu-board/TV2-a-la-carte.jpg",
-      "assets/Braise-100-Menu-board/TV3-accompagnements.jpg"
-    ]
-  },
-  {
-    id: 3,
-    title: "Bayk",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Bayk Menu board/Plan de travail 1.jpg",
-    gallery: [
-      "assets/Bayk Menu board/Plan de travail 1.jpg",
-      "assets/Bayk Menu board/Plan de travail 2.jpg",
-      "assets/Bayk Menu board/Plan de travail 3.jpg",
-      "assets/Bayk Menu board/Plan de travail 4.jpg"
-    ]
-  },
-  {
-    id: 4,
-    title: "Go Smash",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Go Smash Menu board/TV 1 — SMASH BURGERS.jpg",
-    gallery: [
-      "assets/Go Smash Menu board/TV 1 — SMASH BURGERS.jpg",
-      "assets/Go Smash Menu board/TV 2 — TRIPLES & GROS FORMATS.jpg",
-      "assets/Go Smash Menu board/TV 3 — LONGS SMASH + SMASH BOWL.jpg",
-      "assets/Go Smash Menu board/TV 4 — DESSERTS + EXTRAS.jpg"
-    ]
-  },
-  {
-    id: 5,
-    title: "Krousty Factory",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Krousty Factory Menu Board/MenuBoard - Riz crousty.jpg",
-    gallery: [
-      "assets/Krousty Factory Menu Board/MenuBoard - Riz crousty.jpg",
-      "assets/Krousty Factory Menu Board/MenuBoard - Accompagnement.jpg",
-      "assets/Krousty Factory Menu Board/MenuBoard - Sauce.jpg"
-    ]
-  },
-  {
-    id: 6,
-    title: "Royal Kitchen",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Royal kitchen Menu Board/TV 1 – Produits principaux_.jpg",
-    gallery: [
-      "assets/Royal kitchen Menu Board/TV 1 – Produits principaux_.jpg",
-      "assets/Royal kitchen Menu Board/TV 2 – Street Food.jpg",
-      "assets/Royal kitchen Menu Board/TV 3 – Riz - Tacos Bowl.jpg",
-      "assets/Royal kitchen Menu Board/TV 4 – Healthy & Plats.jpg"
-    ]
-  },
-  {
-    id: 7,
-    title: "Ruspee's",
-    category: "menu",
-    tag: "Menu Board",
-    thumb: "assets/Ruspee's Menu Board/Plan de travail 1.jpg",
-    gallery: [
-      "assets/Ruspee's Menu Board/Plan de travail 1.jpg",
-      "assets/Ruspee's Menu Board/Plan de travail 2.jpg",
-      "assets/Ruspee's Menu Board/Plan de travail 3.jpg"
-    ]
-  },
-  {
-    id: 8,
     title: "Dwich Corner",
     category: "menu",
     tag: "Menu Board",
-    thumb: "assets/MENU BOARD Dwich Corner/SANDWICHS - test.jpg",
+    thumb: "assets/travaux/Dwich Corner/PP - dwich.jpg",
     gallery: [
-      "assets/MENU BOARD Dwich Corner/SANDWICHS - test.jpg",
-      "assets/MENU BOARD Dwich Corner/BURGERS - ROLLS - test.jpg",
-      "assets/MENU BOARD Dwich Corner/TACOS - SIGNATURE - test.jpg",
-      "assets/MENU BOARD Dwich Corner/RIZ CROUSTY - test.jpg",
-      "assets/MENU BOARD Dwich Corner/DESSERTS - MENU ENFANTS - test.jpg"
+      "assets/travaux/Dwich Corner/PP - dwich.jpg",
+      "assets/travaux/Dwich Corner/MB 1 - dwich.jpg",
+      "assets/travaux/Dwich Corner/MB 2 - dwich.jpg",
+      "assets/travaux/Dwich Corner/MB 3 - dwich.jpg",
+      "assets/travaux/Dwich Corner/MB 4 - dwich.jpg"
+    ]
+  },
+
+  {
+    id: 3,
+    title: "GO Smash",
+    category: "menu",
+    tag: "Menu Board & Print",
+    thumb: "assets/travaux/GO Smash/PP - Gosmash B.jpg",
+    gallery: [
+      "assets/travaux/GO Smash/PP - Gosmash B.jpg",
+      "assets/travaux/GO Smash/MB 1 - Gosmash B.jpg",
+      "assets/travaux/GO Smash/MB 2 - Gosmash B.jpg",
+      "assets/travaux/GO Smash/MB 3 - Gosmash B.jpg",
+      "assets/travaux/GO Smash/MB 4 - Gosmash B.jpg",
+      "assets/travaux/GO Smash/Depliant Exterieur - Gosmash B.jpg",
+      "assets/travaux/GO Smash/Depliant Interieur - Gosmash B.jpg",
+      "assets/travaux/GO Smash/Mockup Print - Gosmash B.jpg"
+    ]
+  },
+
+  {
+    id: 4,
+    title: "Krousty Factory",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/travaux/Krousty Factory/PP KF.jpg",
+    gallery: [
+      "assets/travaux/Krousty Factory/PP KF.jpg",
+      "assets/travaux/Krousty Factory/MB RIZ.jpg",
+      "assets/travaux/Krousty Factory/MB TEX.jpg",
+      "assets/travaux/Krousty Factory/MB sauces.jpg"
+    ]
+  },
+
+  {
+    id: 5,
+    title: "Royal Kitchen",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/travaux/Royal Kitchen/PP - B.jpg",
+    gallery: [
+      "assets/travaux/Royal Kitchen/PP - B.jpg",
+      "assets/travaux/Royal Kitchen/MB 1 - B.jpg",
+      "assets/travaux/Royal Kitchen/MB 1 - B-1.jpg",
+      "assets/travaux/Royal Kitchen/MB 1 - B-2.jpg",
+      "assets/travaux/Royal Kitchen/MB 1 - B-3.jpg"
+    ]
+  },
+
+  {
+    id: 6,
+    title: "Ruspee's",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/travaux/Ruspee's/PP RSPS.jpg",
+    gallery: [
+      "assets/travaux/Ruspee's/PP RSPS.jpg",
+      "assets/travaux/Ruspee's/MB Accom.jpg",
+      "assets/travaux/Ruspee's/MB Kids.jpg",
+      "assets/travaux/Ruspee's/MB Poulet.jpg"
     ]
   }
+
 ];

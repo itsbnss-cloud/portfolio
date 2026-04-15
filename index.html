@@ -287,10 +287,7 @@
         </div>
         <div class="filter-bar" data-reveal="up">
           <button class="filter-btn active" data-filter="all">Tout</button>
-          <button class="filter-btn" data-filter="logo">Logo &amp; ID</button>
           <button class="filter-btn" data-filter="menu">Menu Board</button>
-          <button class="filter-btn" data-filter="flyer">Flyer</button>
-          <!-- Flyer à venir -->
         </div>
       </div><!-- /.container -->
       <div class="projects-carousel-wrap">
@@ -489,57 +486,35 @@
 
     <!-- LIGHTBOX -->
     <div id="lightbox">
-      <div class="lb-backdrop"></div>
-
-      <!-- Floating meta — top left -->
-      <div class="lb-meta">
-        <span class="lb-tag"></span>
-        <h3 class="lb-title"></h3>
+      <!-- Top bar -->
+      <div class="lb-topbar">
+        <div class="lb-meta">
+          <span class="lb-tag"></span>
+          <h3 class="lb-title"></h3>
+        </div>
+        <div class="lb-topbar-right">
+          <span class="lb-counter"></span>
+          <button class="lb-close" aria-label="Fermer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
       </div>
 
-      <!-- Close — top right -->
-      <button class="lb-close" aria-label="Fermer">✕</button>
-
-      <!-- Image — centre -->
-      <div class="lb-viewport">
+      <!-- Image stage -->
+      <div class="lb-stage">
         <img class="lb-img" src="" alt="" />
       </div>
 
-      <!-- Arrows — edges -->
+      <!-- Progress bar -->
+      <div class="lb-progress"><div class="lb-progress-fill"></div></div>
+
+      <!-- Arrows -->
       <button class="lb-prev" aria-label="Précédent">
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15,18 9,12 15,6" />
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
       </button>
       <button class="lb-next" aria-label="Suivant">
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="9,18 15,12 9,6" />
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
       </button>
-
-      <!-- Dots — bottom centre -->
-      <div class="lb-dots"></div>
-
-      <!-- Counter — bottom right -->
-      <p class="lb-counter"></p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

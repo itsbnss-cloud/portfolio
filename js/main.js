@@ -413,15 +413,25 @@ function initProjects() {
    ============================================================ */
 let lbIndex = 0;
 let lbProject = null;
+let lbLocked = false;
+
+function updateLbProgress() {
+  const fill = document.querySelector('.lb-progress-fill');
+  if (!fill || !lbProject) return;
+  const pct = lbProject.gallery.length > 1
+    ? (lbIndex / (lbProject.gallery.length - 1)) * 100
+    : 100;
+  fill.style.width = pct + '%';
+}
 
 function openLightbox(project) {
   lbProject = project;
   lbIndex   = 0;
+  lbLocked  = false;
 
-  const lb      = document.getElementById('lightbox');
-  const img     = lb.querySelector('.lb-img');
-  const title   = lb.querySelector('.lb-title');
-  const tag     = lb.querySelector('.lb-tag');
+  const lb    = document.getElementById('lightbox');
+  const title = lb.querySelector('.lb-title');
+  const tag   = lb.querySelector('.lb-tag');
 
   title.textContent = project.title;
   tag.textContent   = project.tag;
@@ -429,84 +439,82 @@ function openLightbox(project) {
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  renderLbSlide();
-  renderLbDots();
+  renderLbSlide(0);
 }
 
 function closeLightbox() {
   const lb = document.getElementById('lightbox');
-  lb.classList.remove('open');
-  document.body.style.overflow = '';
-  lbProject = null;
+  gsap.to(lb, {
+    opacity: 0, duration: 0.35, ease: 'power2.in',
+    onComplete: () => {
+      lb.classList.remove('open');
+      gsap.set(lb, { opacity: 1 });
+      document.body.style.overflow = '';
+      lbProject = null;
+      lbLocked  = false;
+    }
+  });
 }
 
-// dir: 0 = initial, 1 = forward, -1 = backward
+// dir: 0 = initial open, 1 = forward, -1 = backward
 function renderLbSlide(dir = 0) {
   const lb      = document.getElementById('lightbox');
   const img     = lb.querySelector('.lb-img');
   const counter = lb.querySelector('.lb-counter');
 
-  // Cinematic: subtle drift (not a carousel slide), combined with opacity + scale
-  const drift = 26 * dir; // pixels — very soft, just whispers direction
-
-  const show = () => {
+  const commit = () => {
     img.src = lbProject.gallery[lbIndex];
     img.alt = lbProject.title;
     counter.textContent = `${lbIndex + 1} / ${lbProject.gallery.length}`;
-    lb.querySelectorAll('.lb-dot').forEach((d, i) => d.classList.toggle('active', i === lbIndex));
-    gsap.fromTo(img,
-      { opacity: 0, x: -drift * 0.55, scale: 0.975 },
-      { opacity: 1, x: 0,             scale: 1,     duration: 0.52, ease: 'power3.out' }
-    );
+    updateLbProgress();
   };
 
-  if (dir !== 0) {
-    gsap.to(img, {
-      opacity: 0, x: drift, scale: 0.975,
-      duration: 0.26, ease: 'power2.in',
-      onComplete: show
-    });
+  if (dir === 0) {
+    // Initial: scale in from slightly large + blur
+    commit();
+    gsap.fromTo(img,
+      { opacity: 0, scale: 1.06 },
+      { opacity: 1, scale: 1, duration: 0.7, ease: 'expo.out',
+        onComplete: () => { lbLocked = false; } }
+    );
   } else {
-    gsap.set(img, { x: 0, scale: 1, opacity: 0 });
-    show();
+    // Cinematic push: slide out → swap src → slide in
+    const xOut = dir * 90;
+    gsap.to(img, {
+      x: xOut, opacity: 0, scale: 0.93,
+      duration: 0.3, ease: 'power3.in',
+      onComplete: () => {
+        commit();
+        gsap.fromTo(img,
+          { x: -xOut * 0.65, opacity: 0, scale: 0.93 },
+          { x: 0, opacity: 1, scale: 1,
+            duration: 0.65, ease: 'expo.out',
+            onComplete: () => { lbLocked = false; } }
+        );
+      }
+    });
   }
 }
 
-function renderLbDots() {
-  const lb   = document.getElementById('lightbox');
-  const dots = lb.querySelector('.lb-dots');
-  dots.innerHTML = lbProject.gallery.map((_, i) =>
-    `<span class="lb-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`
-  ).join('');
-
-  dots.querySelectorAll('.lb-dot').forEach(d => {
-    d.addEventListener('click', () => {
-      const newIdx = parseInt(d.dataset.i);
-      const dir = newIdx > lbIndex ? 1 : -1;
-      lbIndex = newIdx;
-      renderLbSlide(dir);
-    });
-  });
-}
-
 function initLightbox() {
-  const lb   = document.getElementById('lightbox');
-  const prev = lb.querySelector('.lb-prev');
-  const next = lb.querySelector('.lb-next');
+  const lb    = document.getElementById('lightbox');
+  const prev  = lb.querySelector('.lb-prev');
+  const next  = lb.querySelector('.lb-next');
   const close = lb.querySelector('.lb-close');
 
   close.addEventListener('click', closeLightbox);
 
-  // Click on the dark area around the image (not the image itself) → close
-  lb.querySelector('.lb-viewport').addEventListener('click', e => {
-    if (e.target === lb.querySelector('.lb-viewport')) closeLightbox();
+  // Click on stage background → close
+  lb.querySelector('.lb-stage').addEventListener('click', e => {
+    if (e.target === lb.querySelector('.lb-stage')) closeLightbox();
   });
 
   const navigate = (dir) => {
-    if (!lbProject) return;
+    if (!lbProject || lbLocked) return;
     const n = lbProject.gallery.length;
     lbIndex = (lbIndex + dir + n) % n;
-    renderLbSlide(dir); // dots updated inside renderLbSlide → show()
+    lbLocked = true;
+    renderLbSlide(dir);
   };
 
   prev.addEventListener('click', () => navigate(-1));
@@ -519,40 +527,35 @@ function initLightbox() {
     if (e.key === 'ArrowRight') navigate(1);
   });
 
-  // Scroll wheel + trackpad — one gesture = one slide
-  // Lock for 800 ms (full animation) and filter micro-deltas from momentum decay
-  let wheelLock = false;
+  // Scroll wheel + trackpad — one gesture = one slide, lock during animation
   lb.addEventListener('wheel', e => {
     e.preventDefault();
-    if (!lbProject) return;
-    if (wheelLock) return;
+    if (!lbProject || lbLocked) return;
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) < 4) return; // ignore residual inertia events
-    wheelLock = true;
+    if (Math.abs(delta) < 4) return;
     navigate(delta > 0 ? 1 : -1);
-    setTimeout(() => { wheelLock = false; }, 800);
   }, { passive: false });
 
-  // Touch swipe — horizontal on desktop, vertical on mobile
-  let touchStartX = 0, touchStartY = 0;
+  // Touch swipe
+  let tx = 0, ty = 0;
   lb.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
   }, { passive: true });
 
   lb.addEventListener('touchend', e => {
-    if (!lbProject) return;
-    const dx = touchStartX - e.changedTouches[0].clientX;
-    const dy = touchStartY - e.changedTouches[0].clientY;
-    if (window.innerWidth < 768) {
-      if (Math.abs(dy) > 40) navigate(dy > 0 ? 1 : -1);
-    } else {
+    if (!lbProject || lbLocked) return;
+    const dx = tx - e.changedTouches[0].clientX;
+    const dy = ty - e.changedTouches[0].clientY;
+    if (Math.abs(dx) >= Math.abs(dy)) {
       if (Math.abs(dx) > 40) navigate(dx > 0 ? 1 : -1);
+    } else {
+      if (Math.abs(dy) > 40) navigate(dy > 0 ? 1 : -1);
     }
   });
 
-  // Cursor hover on lightbox buttons
-  [prev, next, close, lb.querySelector('.lb-backdrop')].forEach(el => {
+  // Cursor hover
+  [prev, next, close].forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   });
