@@ -1166,7 +1166,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   align-items: center;
   /* padding = (100 - slide-height) / 2 so first/last slide can center-snap */
   padding-block: 18dvh;
-  gap: 0.5rem;
+  gap: 4px;
 }
 
 .lb-reel::-webkit-scrollbar { display: none; }
@@ -1225,7 +1225,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   .lb-topbar { padding: 1rem 1rem; }
   .lb-close { width: 48px; height: 48px; }
   /* mobile: 64dvh slide → 18dvh peek above/below, 0.5rem gap for continuity */
-  .lb-reel { gap: 0.5rem; padding-block: 18dvh; }
+  .lb-reel { gap: 4px; padding-block: 18dvh; }
   .lb-slide { height: 64dvh; }
   .lb-slide-img { max-width: 96vw; max-height: 56dvh; }
 }
