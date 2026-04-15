@@ -325,6 +325,9 @@ function initCarousel() {
   document.getElementById('car-prev').addEventListener('click', () => { carIndex--; updateCarousel(); });
   document.getElementById('car-next').addEventListener('click', () => { carIndex++; updateCarousel(); });
 
+  // Re-run after full load to guarantee correct dimensions on mobile
+  window.addEventListener('load', () => updateCarousel(false));
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
