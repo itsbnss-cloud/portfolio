@@ -179,17 +179,16 @@ function initScrollReveal() {
    GSAP SCROLL ANIMATIONS
    ============================================================ */
 function initScrollAnimations() {
-  // Services stagger
+  // Services stagger — opacity only, no Y offset to keep grid alignment
   gsap.from('.service-card', {
     scrollTrigger: {
       trigger: '.services-grid',
-      start: 'top 80%',
+      start: 'top 82%',
     },
     opacity: 0,
-    y: 60,
-    duration: 0.8,
-    stagger: 0.15,
-    ease: 'power3.out'
+    duration: 0.7,
+    stagger: 0.12,
+    ease: 'power2.out'
   });
 
   // Projects stagger
@@ -300,9 +299,11 @@ function renderProjects(filter = 'all') {
     <div class="project-card" data-id="${p.id}" style="cursor:none">
       <img src="${p.thumb}" alt="${p.title}" class="project-card-img" loading="lazy" />
       <div class="project-overlay">
-        <p class="project-tag">${p.tag}</p>
         <h3 class="project-title">${p.title}</h3>
-        ${p.gallery.length > 1 ? `<span class="project-count">${p.gallery.length} slides</span>` : ''}
+        <div class="project-info">
+          <p class="project-tag">${p.tag}</p>
+          ${p.gallery.length > 1 ? `<span class="project-count">${p.gallery.length} slides</span>` : ''}
+        </div>
       </div>
     </div>
   `).join('');
@@ -365,19 +366,36 @@ function closeLightbox() {
   lbProject = null;
 }
 
-function renderLbSlide() {
-  const lb  = document.getElementById('lightbox');
-  const img = lb.querySelector('.lb-img');
+// dir: 0 = initial, 1 = forward, -1 = backward
+function renderLbSlide(dir = 0) {
+  const lb      = document.getElementById('lightbox');
+  const img     = lb.querySelector('.lb-img');
   const counter = lb.querySelector('.lb-counter');
 
-  img.classList.add('fade');
-  setTimeout(() => {
+  // Cinematic: subtle drift (not a carousel slide), combined with opacity + scale
+  const drift = 26 * dir; // pixels — very soft, just whispers direction
+
+  const show = () => {
     img.src = lbProject.gallery[lbIndex];
     img.alt = lbProject.title;
-    img.classList.remove('fade');
     counter.textContent = `${lbIndex + 1} / ${lbProject.gallery.length}`;
     lb.querySelectorAll('.lb-dot').forEach((d, i) => d.classList.toggle('active', i === lbIndex));
-  }, 180);
+    gsap.fromTo(img,
+      { opacity: 0, x: -drift * 0.55, scale: 0.975 },
+      { opacity: 1, x: 0,             scale: 1,     duration: 0.52, ease: 'power3.out' }
+    );
+  };
+
+  if (dir !== 0) {
+    gsap.to(img, {
+      opacity: 0, x: drift, scale: 0.975,
+      duration: 0.26, ease: 'power2.in',
+      onComplete: show
+    });
+  } else {
+    gsap.set(img, { x: 0, scale: 1, opacity: 0 });
+    show();
+  }
 }
 
 function renderLbDots() {
@@ -388,7 +406,12 @@ function renderLbDots() {
   ).join('');
 
   dots.querySelectorAll('.lb-dot').forEach(d => {
-    d.addEventListener('click', () => { lbIndex = parseInt(d.dataset.i); renderLbSlide(); });
+    d.addEventListener('click', () => {
+      const newIdx = parseInt(d.dataset.i);
+      const dir = newIdx > lbIndex ? 1 : -1;
+      lbIndex = newIdx;
+      renderLbSlide(dir);
+    });
   });
 }
 
@@ -399,37 +422,58 @@ function initLightbox() {
   const close = lb.querySelector('.lb-close');
 
   close.addEventListener('click', closeLightbox);
-  lb.querySelector('.lb-backdrop').addEventListener('click', closeLightbox);
 
-  prev.addEventListener('click', () => {
-    if (!lbProject) return;
-    lbIndex = (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length;
-    renderLbSlide();
+  // Click on the dark area around the image (not the image itself) → close
+  lb.querySelector('.lb-viewport').addEventListener('click', e => {
+    if (e.target === lb.querySelector('.lb-viewport')) closeLightbox();
   });
 
-  next.addEventListener('click', () => {
+  const navigate = (dir) => {
     if (!lbProject) return;
-    lbIndex = (lbIndex + 1) % lbProject.gallery.length;
-    renderLbSlide();
-  });
+    const n = lbProject.gallery.length;
+    lbIndex = (lbIndex + dir + n) % n;
+    renderLbSlide(dir); // dots updated inside renderLbSlide → show()
+  };
+
+  prev.addEventListener('click', () => navigate(-1));
+  next.addEventListener('click', () => navigate(1));
 
   document.addEventListener('keydown', e => {
     if (!lbProject) return;
     if (e.key === 'Escape')     closeLightbox();
-    if (e.key === 'ArrowLeft')  { lbIndex = (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length; renderLbSlide(); }
-    if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbProject.gallery.length; renderLbSlide(); }
+    if (e.key === 'ArrowLeft')  navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
   });
 
-  // Swipe support
-  let touchStartX = 0;
-  lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  // Scroll wheel + trackpad — one gesture = one slide
+  // Lock for 800 ms (full animation) and filter micro-deltas from momentum decay
+  let wheelLock = false;
+  lb.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (!lbProject) return;
+    if (wheelLock) return;
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) < 4) return; // ignore residual inertia events
+    wheelLock = true;
+    navigate(delta > 0 ? 1 : -1);
+    setTimeout(() => { wheelLock = false; }, 800);
+  }, { passive: false });
+
+  // Touch swipe — horizontal on desktop, vertical on mobile
+  let touchStartX = 0, touchStartY = 0;
+  lb.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
   lb.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50 && lbProject) {
-      lbIndex = diff > 0
-        ? (lbIndex + 1) % lbProject.gallery.length
-        : (lbIndex - 1 + lbProject.gallery.length) % lbProject.gallery.length;
-      renderLbSlide();
+    if (!lbProject) return;
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (window.innerWidth < 768) {
+      if (Math.abs(dy) > 40) navigate(dy > 0 ? 1 : -1);
+    } else {
+      if (Math.abs(dx) > 40) navigate(dx > 0 ? 1 : -1);
     }
   });
 
