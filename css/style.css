@@ -1165,35 +1165,35 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   flex-direction: column;
   align-items: center;
   /* padding = (100 - slide-height) / 2 so first/last slide can center-snap */
-  padding-block: 16dvh;
-  gap: 0.75rem;
+  padding-block: 18dvh;
+  gap: 0.5rem;
 }
 
 .lb-reel::-webkit-scrollbar { display: none; }
 
-/* slide: 68dvh → 16dvh peek above + below for adjacent slides */
+/* slide: 64dvh → (100-64)/2 = 18dvh peek above + below for adjacent slides */
 .lb-slide {
   flex-shrink: 0;
   width: 100%;
-  height: 68dvh;
+  height: 64dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   scroll-snap-align: center;
 }
 
-/* default: adjacent slide — dimmed, blurred, scaled down */
+/* default: adjacent slide — slightly dimmed, softly blurred, slightly reduced */
 .lb-slide-img {
   display: block;
   max-width: min(80vw, 1000px);
-  max-height: 60dvh;
+  max-height: 56dvh;
   object-fit: contain;
-  transform: scale(0.8);
-  filter: blur(5px);
-  opacity: 0.3;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              filter  0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.88);
+  filter: blur(2px);
+  opacity: 0.45;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              filter  0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform, filter, opacity;
 }
 
@@ -1224,10 +1224,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 @media (max-width: 600px) {
   .lb-topbar { padding: 1rem 1rem; }
   .lb-close { width: 48px; height: 48px; }
-  /* mobile: 68dvh slide → ~16dvh peek above/below */
-  .lb-reel { gap: 0.5rem; padding-block: 16dvh; }
-  .lb-slide { height: 68dvh; }
-  .lb-slide-img { max-width: 96vw; max-height: 60dvh; }
+  /* mobile: 64dvh slide → 18dvh peek above/below, 0.5rem gap for continuity */
+  .lb-reel { gap: 0.5rem; padding-block: 18dvh; }
+  .lb-slide { height: 64dvh; }
+  .lb-slide-img { max-width: 96vw; max-height: 56dvh; }
 }
 
 /* ============================================================
