@@ -270,58 +270,11 @@ function initMagnetic() {
 }
 
 /* ============================================================
-   PROJECTS GRID — vertical snap with focus/blur depth
+   PROJECTS GRID
    ============================================================ */
-let projectsScrollLocked = false;
-let projectsScrollUnlisten = null;
-let projectsWheelUnlisten = null;
-
-function initProjectsFocus(scrollWrap) {
-  // Detach previous listeners
-  if (projectsScrollUnlisten) projectsScrollUnlisten();
-  if (projectsWheelUnlisten)  projectsWheelUnlisten();
-
-  function updateActive() {
-    const center = scrollWrap.scrollTop + scrollWrap.clientHeight / 2;
-    const cards  = scrollWrap.querySelectorAll('.project-card');
-    let closest = null, closestDist = Infinity;
-    cards.forEach(card => {
-      const dist = Math.abs((card.offsetTop + card.offsetHeight / 2) - center);
-      if (dist < closestDist) { closestDist = dist; closest = card; }
-    });
-    cards.forEach(c => c.classList.toggle('is-active', c === closest));
-  }
-
-  scrollWrap.addEventListener('scroll', updateActive, { passive: true });
-  projectsScrollUnlisten = () => scrollWrap.removeEventListener('scroll', updateActive);
-
-  // Wheel: one card at a time, boundary-aware
-  const onWheel = e => {
-    const cards = Array.from(scrollWrap.querySelectorAll('.project-card'));
-    if (!cards.length) return;
-    const active = cards.find(c => c.classList.contains('is-active')) || cards[0];
-    const idx    = cards.indexOf(active);
-    const next   = idx + (e.deltaY > 0 ? 1 : -1);
-    if (next < 0 || next >= cards.length) return; // let page scroll at boundaries
-    e.preventDefault();
-    if (projectsScrollLocked) return;
-    projectsScrollLocked = true;
-    cards[next].scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => { projectsScrollLocked = false; }, 700);
-  };
-  scrollWrap.addEventListener('wheel', onWheel, { passive: false });
-  projectsWheelUnlisten = () => scrollWrap.removeEventListener('wheel', onWheel);
-
-  // First active card
-  updateActive();
-}
-
 function renderProjects(filter = 'all') {
-  const grid      = document.getElementById('projects-grid');
-  const scrollWrap = document.getElementById('projects-scroll-wrap');
-  const filtered  = filter === 'all' ? projects : projects.filter(p => p.category === filter);
-
-  if (scrollWrap) scrollWrap.scrollTop = 0;
+  const grid     = document.getElementById('projects-grid');
+  const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div style="padding:3rem;color:var(--muted);font-size:13px;font-weight:600;">Bientôt disponible ✦</div>`;
@@ -350,10 +303,7 @@ function renderProjects(filter = 'all') {
     });
   });
 
-  requestAnimationFrame(() => {
-    gsap.from('.project-card', { opacity: 0, y: 30, duration: 0.5, stagger: 0.1, ease: 'power2.out' });
-    initProjectsFocus(scrollWrap);
-  });
+  gsap.from('.project-card', { opacity: 0, y: 24, duration: 0.5, stagger: 0.08, ease: 'power2.out' });
 }
 
 function initProjects() {
@@ -498,6 +448,19 @@ function initLightbox() {
     navigateLb(e.deltaY > 0 ? 1 : -1);
     setTimeout(() => { lbScrollLocked = false; }, 650);
   }, { passive: false });
+
+  // Swipe down to close (when reel is at top)
+  let swipeTouchY = 0, swipeStartScroll = 0;
+  lb.addEventListener('touchstart', e => {
+    swipeTouchY      = e.touches[0].clientY;
+    swipeStartScroll = reel.scrollTop;
+  }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (!lbProject) return;
+    const dy = e.changedTouches[0].clientY - swipeTouchY;
+    // Swipe down > 90px while already at top → close
+    if (dy > 90 && swipeStartScroll < 20) closeLightbox();
+  }, { passive: true });
 
   // Cursor hover on close
   close.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));

@@ -833,20 +833,13 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   z-index: 1;
 }
 
-/* ── Vertical snap navigation ── */
+/* ── Projects vertical layout ── */
 .projects-scroll-wrap {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 82vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: y mandatory;
+  padding: 2rem clamp(1.5rem, 5vw, 5rem) 5rem;
 }
-
-.projects-scroll-wrap::-webkit-scrollbar { display: none; }
 
 .filter-bar {
   display: flex;
@@ -886,40 +879,24 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
-  padding: 28vh clamp(1.5rem, 5vw, 5rem);
+  gap: 1.75rem;
 }
 
 .project-card {
-  flex-shrink: 0;
-  width: min(560px, 88vw);
-  scroll-snap-align: center;
+  width: min(700px, 92vw);
   border-radius: 20px;
   overflow: hidden;
   position: relative;
   aspect-ratio: 4/3;
   background: var(--s3);
   cursor: none;
-  /* default: adjacent — dimmed, blurred, scaled down */
-  transform: scale(0.86);
-  filter: blur(3px);
-  opacity: 0.42;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-              filter  0.55s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* active (centered) card */
-.project-card.is-active {
-  transform: scale(1);
-  filter: blur(0px);
-  opacity: 1;
-}
-
-.project-card.is-active:hover {
-  transform: scale(1.025);
-  box-shadow: 0 28px 70px rgba(0,0,0,0.65), 0 0 0 1px rgba(245,166,35,0.22);
+.project-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(245,166,35,0.2);
 }
 
 .project-bg {
@@ -1159,15 +1136,16 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 }
 
 .lb-close {
-  width: 34px; height: 34px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: 50%;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.7);
   cursor: none;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.25s, color 0.25s, border-color 0.25s;
   pointer-events: all;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .lb-close:hover { background: var(--y); border-color: var(--y); color: #000; }
@@ -1242,8 +1220,9 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 
 /* ── Mobile ── */
 @media (max-width: 600px) {
-  .lb-topbar { padding: 1.25rem 1.25rem; }
-  .lb-slide-img { max-width: 94vw; max-height: 68dvh; }
+  .lb-topbar { padding: 1rem 1rem; }
+  .lb-close { width: 48px; height: 48px; } /* large touch target */
+  .lb-slide-img { max-width: 96vw; max-height: 68dvh; }
 }
 
 /* ============================================================
@@ -1354,9 +1333,9 @@ footer {
 
   .services-grid { max-width: 100%; }
 
-  .project-card { width: 88vw; }
-  .projects-scroll-wrap { height: 78vh; }
-  #projects { padding: 6rem 0 5rem; }
+  .project-card { width: 94vw; }
+  .projects-grid { gap: 1.25rem; }
+  #projects { padding: 6rem 0 4rem; }
   .filter-bar { gap: 0.5rem; }
   .filter-btn { padding: 8px 14px; }
 
