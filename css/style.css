@@ -21,6 +21,14 @@
   --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@font-face {
+  font-family: 'Moga';
+  src: url('../moga-font/moga.otf') format('opentype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -251,9 +259,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 }
 
 #mobile-menu a {
+  font-family: 'Moga', 'Montserrat', sans-serif;
   font-size: 28px;
   font-weight: 900;
-  letter-spacing: -0.5px;
+  letter-spacing: 0;
   color: var(--text);
   transition: color 0.3s;
 }
@@ -522,9 +531,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 }
 
 .section-title {
-  font-size: clamp(28px, 4vw, 42px);
+  font-family: 'Moga', 'Montserrat', sans-serif;
+  font-size: clamp(30px, 4.5vw, 48px);
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: 0;
   line-height: 1.1;
   color: #fff;
   margin-bottom: 1.5rem;
@@ -747,12 +757,14 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 .service-card:hover .service-icon svg { color: #000; }
 
 .service-card h3 {
-  font-size: 16px;
+  font-family: 'Moga', 'Montserrat', sans-serif;
+  font-size: 18px;
   font-weight: 800;
   color: #fff;
   margin-bottom: 0.75rem;
   position: relative;
   z-index: 1;
+  letter-spacing: 0;
 }
 
 .service-card p {
