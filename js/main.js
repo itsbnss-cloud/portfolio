@@ -322,7 +322,6 @@ function initProjects() {
    ============================================================ */
 let lbIndex = 0;
 let lbProject = null;
-let lbScrollLocked = false;
 let lbReelOnScroll = null;
 
 function updateLbProgress() {
@@ -394,7 +393,6 @@ function buildLbReel(project) {
 function openLightbox(project) {
   lbProject = project;
   lbIndex   = 0;
-  lbScrollLocked = false;
 
   const lb = document.getElementById('lightbox');
   lb.querySelector('.lb-title').textContent = project.title;
@@ -419,7 +417,6 @@ function closeLightbox() {
       if (lbReelOnScroll) reel.removeEventListener('scroll', lbReelOnScroll);
       reel.innerHTML = '';
       lbProject = null;
-      lbScrollLocked = false;
     }
   });
 }
@@ -444,15 +441,7 @@ function initLightbox() {
     if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); navigateLb(-1); }
   });
 
-  // Mouse wheel: one slide at a time
-  lb.addEventListener('wheel', e => {
-    if (!lbProject) return;
-    e.preventDefault();
-    if (lbScrollLocked) return;
-    lbScrollLocked = true;
-    navigateLb(e.deltaY > 0 ? 1 : -1);
-    setTimeout(() => { lbScrollLocked = false; }, 650);
-  }, { passive: false });
+  // Mouse wheel: free native scroll inside reel — no interception
 
   // Swipe down to close (when reel is at top)
   let swipeTouchY = 0, swipeStartScroll = 0;
