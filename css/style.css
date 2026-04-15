@@ -1164,18 +1164,18 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding lets first/last slide snap to center */
-  padding-block: 10dvh;
-  gap: 2rem;
+  /* padding = (100 - slide-height) / 2 so first/last slide can center-snap */
+  padding-block: 16dvh;
+  gap: 0.75rem;
 }
 
 .lb-reel::-webkit-scrollbar { display: none; }
 
-/* each slide takes 80dvh so adjacent slides peek */
+/* slide: 68dvh → 16dvh peek above + below for adjacent slides */
 .lb-slide {
   flex-shrink: 0;
   width: 100%;
-  height: 80dvh;
+  height: 68dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1186,7 +1186,7 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 .lb-slide-img {
   display: block;
   max-width: min(80vw, 1000px);
-  max-height: 72dvh;
+  max-height: 60dvh;
   object-fit: contain;
   transform: scale(0.8);
   filter: blur(5px);
@@ -1224,9 +1224,10 @@ body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(24
 @media (max-width: 600px) {
   .lb-topbar { padding: 1rem 1rem; }
   .lb-close { width: 48px; height: 48px; }
-  .lb-reel { gap: 0.5rem; padding-block: 8dvh; }
-  .lb-slide { height: 76dvh; }
-  .lb-slide-img { max-width: 96vw; max-height: 66dvh; }
+  /* mobile: 68dvh slide → ~16dvh peek above/below */
+  .lb-reel { gap: 0.5rem; padding-block: 16dvh; }
+  .lb-slide { height: 68dvh; }
+  .lb-slide-img { max-width: 96vw; max-height: 60dvh; }
 }
 
 /* ============================================================
