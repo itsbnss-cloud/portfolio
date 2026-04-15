@@ -428,8 +428,42 @@ function initLightbox() {
 
   close.addEventListener('click', closeLightbox);
 
-  // Click on empty space around slide image → close
+  // ── Drag-to-scroll (desktop) ────────────────────────────────
+  let isDragging    = false;
+  let dragStartY    = 0;
+  let dragScrollTop = 0;
+  let hasDragged    = false;
+
+  reel.addEventListener('mouseenter', () => document.body.classList.add('cursor-drag'));
+  reel.addEventListener('mouseleave', () => { if (!isDragging) document.body.classList.remove('cursor-drag'); });
+
+  reel.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    isDragging    = true;
+    hasDragged    = false;
+    dragStartY    = e.clientY;
+    dragScrollTop = reel.scrollTop;
+    document.body.classList.add('cursor-dragging');
+    e.preventDefault(); // prevent text selection
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dy = e.clientY - dragStartY;
+    if (Math.abs(dy) > 4) hasDragged = true;
+    reel.scrollTop = dragScrollTop - dy;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    document.body.classList.remove('cursor-dragging');
+    if (!reel.matches(':hover')) document.body.classList.remove('cursor-drag');
+  });
+
+  // Click on empty space → close (only if not a drag)
   reel.addEventListener('click', e => {
+    if (hasDragged) { hasDragged = false; return; }
     if (e.target === reel || e.target.classList.contains('lb-slide')) closeLightbox();
   });
 
@@ -452,7 +486,6 @@ function initLightbox() {
   lb.addEventListener('touchend', e => {
     if (!lbProject) return;
     const dy = e.changedTouches[0].clientY - swipeTouchY;
-    // Swipe down > 90px while already at top → close
     if (dy > 90 && swipeStartScroll < 20) closeLightbox();
   }, { passive: true });
 

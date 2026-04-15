@@ -122,6 +122,11 @@ section { padding: 7rem 0; }
 body.cursor-hover #cursor-dot   { width: 10px; height: 10px; }
 body.cursor-hover #cursor-ring  { width: 50px; height: 50px; background: rgba(245,166,35,0.08); border-color: var(--y); }
 
+/* drag state inside lightbox reel */
+body.cursor-drag     #cursor-ring { width: 48px; height: 48px; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); transition: width 0.2s, height 0.2s, border-color 0.2s; }
+body.cursor-dragging #cursor-dot  { width: 6px; height: 6px; background: #fff; }
+body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); }
+
 /* ============================================================
    NAVBAR
    ============================================================ */
