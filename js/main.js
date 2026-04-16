@@ -3,7 +3,7 @@
    main.js
    ============================================================ */
 
-gsap.registerPlugin(ScrollTrigger);
+try { gsap.registerPlugin(ScrollTrigger); } catch(e) { console.warn('GSAP ScrollTrigger not loaded:', e); }
 
 /* ============================================================
    iOS-SAFE SCROLL LOCK  (used by both mobile menu & lightbox)
@@ -76,12 +76,14 @@ function initHeroAnimation() {
 }
 
 // Set initial states before loader finishes
-gsap.set('.hero-tag',         { opacity: 0, y: 30 });
-gsap.set('.hero-wordmark',    { opacity: 0, y: 40 });
-gsap.set('.hero-sub',         { opacity: 0, y: 30 });
-gsap.set('.hero-btns',        { opacity: 0, y: 30 });
-gsap.set('.hero-right',       { opacity: 0, x: 60 });
-gsap.set('.hero-scroll-hint', { opacity: 0 });
+try {
+  gsap.set('.hero-tag',         { opacity: 0, y: 30 });
+  gsap.set('.hero-wordmark',    { opacity: 0, y: 40 });
+  gsap.set('.hero-sub',         { opacity: 0, y: 30 });
+  gsap.set('.hero-btns',        { opacity: 0, y: 30 });
+  gsap.set('.hero-right',       { opacity: 0, x: 60 });
+  gsap.set('.hero-scroll-hint', { opacity: 0 });
+} catch(e) { console.warn('GSAP initial set failed:', e); }
 
 /* ============================================================
    CUSTOM CURSOR
