@@ -1688,7 +1688,7 @@ body.cursor-dragging #cursor-ring {
   }
 
   .projet-images {
-    gap: 5px;
+    gap: 0.6rem;
   }
 
   #projet-gallery .container {
@@ -1746,15 +1746,8 @@ body.cursor-dragging #cursor-ring {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  transition: box-shadow 1.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.projet-img-wrap.glow-in,
-.format-card.glow-in {
-  box-shadow:
-    0 0 50px rgba(245, 166, 35, 0.09),
-    0 0 100px rgba(245, 166, 35, 0.05);
-}
 
 .projet-img-hero {
   border-radius: 20px;
@@ -1807,7 +1800,7 @@ body.cursor-dragging #cursor-ring {
   overflow: hidden;
   cursor: pointer;
   aspect-ratio: 16 / 5;
-  transition: box-shadow 1.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .format-card img {
