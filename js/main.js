@@ -651,22 +651,42 @@ function initLightbox() {
 function initForm() {
   const form = document.getElementById('contact-form');
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const btn = form.querySelector('button[type="submit"] span');
-    btn.textContent = 'Message envoyé ✓';
-    gsap.to(form.querySelector('button'), {
-      background: '#22c55e',
-      duration: 0.3
-    });
-    setTimeout(() => {
-      btn.textContent = 'Envoyer le message';
-      gsap.to(form.querySelector('button'), {
-        background: 'var(--y)',
-        duration: 0.3
+    const btn      = form.querySelector('button[type="submit"]');
+    const btnLabel = btn.querySelector('span');
+
+    btnLabel.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/mvzdkwkd', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
       });
-      form.reset();
-    }, 3000);
+
+      if (res.ok) {
+        btnLabel.textContent = 'Message envoyé ✓';
+        gsap.to(btn, { background: '#22c55e', duration: 0.3 });
+        form.reset();
+        setTimeout(() => {
+          btnLabel.textContent = 'Envoyer le message';
+          gsap.to(btn, { background: 'var(--y)', duration: 0.3 });
+          btn.disabled = false;
+        }, 4000);
+      } else {
+        throw new Error();
+      }
+    } catch {
+      btnLabel.textContent = 'Erreur — réessayez';
+      gsap.to(btn, { background: '#ef4444', duration: 0.3 });
+      setTimeout(() => {
+        btnLabel.textContent = 'Envoyer le message';
+        gsap.to(btn, { background: 'var(--y)', duration: 0.3 });
+        btn.disabled = false;
+      }, 3000);
+    }
   });
 }
 
