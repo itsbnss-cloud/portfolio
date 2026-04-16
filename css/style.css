@@ -1411,7 +1411,6 @@ body.cursor-dragging #cursor-ring {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  pointer-events: all;
 }
 
 .lb-meta {
@@ -1456,7 +1455,6 @@ body.cursor-dragging #cursor-ring {
   align-items: center;
   justify-content: center;
   transition: background 0.2s, color 0.2s;
-  pointer-events: all;
   -webkit-tap-highlight-color: transparent;
 }
 
