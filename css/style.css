@@ -177,7 +177,7 @@ body.cursor-dragging #cursor-ring {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1002;
+  z-index: 1006;
   padding: 1.25rem 2rem;
   transition: background var(--transition), padding var(--transition),
     border-color var(--transition);
@@ -284,8 +284,6 @@ body.cursor-dragging #cursor-ring {
   border: none;
   cursor: none;
   padding: 4px;
-  position: relative;
-  z-index: 1005;
 }
 
 .nav-burger span {
@@ -305,6 +303,14 @@ body.cursor-dragging #cursor-ring {
 }
 .nav-burger.open span:nth-child(3) {
   transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* Nav — transparent when mobile menu is open */
+#nav.menu-open {
+  background: transparent !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Mobile menu */

@@ -149,7 +149,9 @@ function initNav() {
   burger.addEventListener('click', () => {
     burger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
-    mobileMenu.classList.contains('open') ? lockScroll() : unlockScroll();
+    const isOpen = mobileMenu.classList.contains('open');
+    nav.classList.toggle('menu-open', isOpen);
+    isOpen ? lockScroll() : unlockScroll();
   });
 
   // Close mobile menu on link click
@@ -157,6 +159,7 @@ function initNav() {
     link.addEventListener('click', () => {
       burger.classList.remove('open');
       mobileMenu.classList.remove('open');
+      nav.classList.remove('menu-open');
       unlockScroll();
     });
   });
