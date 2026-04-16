@@ -714,7 +714,8 @@ body.cursor-dragging #cursor-ring {
 }
 
 .section-header .section-tag {
-  justify-content: start;
+  display: inline-flex;
+  justify-content: center;
 }
 
 .section-header .section-tag::before {
