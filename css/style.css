@@ -357,6 +357,7 @@ body.cursor-dragging #cursor-ring {
   color: #f0e6cc !important;
   opacity: 1 !important;
   display: block;
+  text-align: center;
   transition: color 0.3s;
 }
 
