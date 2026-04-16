@@ -349,7 +349,7 @@ body.cursor-dragging #cursor-ring {
   gap: 2.5rem;
 }
 
-#mobile-menu a {
+#mobile-menu ul a {
   font-family: "Moga", "Montserrat", sans-serif;
   font-size: 28px;
   font-weight: 900;
@@ -361,7 +361,7 @@ body.cursor-dragging #cursor-ring {
   transition: color 0.3s;
 }
 
-#mobile-menu a:hover {
+#mobile-menu ul a:hover {
   color: var(--y) !important;
 }
 
@@ -2263,7 +2263,7 @@ footer {
   }
 
   /* Mobile menu — reduce size on small phones */
-  #mobile-menu a {
+  #mobile-menu ul a {
     font-size: 22px;
   }
   #mobile-menu ul {
