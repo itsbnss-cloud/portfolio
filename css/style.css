@@ -1887,7 +1887,7 @@ body.cursor-dragging #cursor-ring {
 }
 
 .format-detail-item--mobile {
-  max-width: 1300px;
+  max-width: 400px;
 }
 
 @media (max-width: 768px) {
