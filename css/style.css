@@ -251,18 +251,18 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
   align-items: center;
   justify-content: center;
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
+  transition: opacity 0.35s ease;
 }
 
 #mobile-menu.open {
   opacity: 1;
-  visibility: visible;
   pointer-events: all;
 }
 
 #mobile-menu ul {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -274,11 +274,13 @@ body.cursor-dragging #cursor-ring { width: 32px; height: 32px; border-color: rgb
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 0;
-  color: var(--text);
+  color: #f0e6cc !important;
+  opacity: 1 !important;
+  display: block;
   transition: color 0.3s;
 }
 
-#mobile-menu a:hover { color: var(--y); }
+#mobile-menu a:hover { color: var(--y) !important; }
 
 /* ============================================================
    HERO
