@@ -320,8 +320,8 @@ function attachCardEvents(card) {
   card.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
   card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   card.addEventListener('click', () => {
-    const project = projects.find(p => p.id === parseInt(card.dataset.id));
-    if (project) openLightbox(project);
+    const id = card.dataset.id;
+    if (id) window.location.href = `projet.html?id=${id}`;
   });
 }
 
