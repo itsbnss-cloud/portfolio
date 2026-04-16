@@ -1803,9 +1803,10 @@ body.cursor-dragging #cursor-ring {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 2rem;
+  overflow-y: auto;
+  padding: max(2rem, 4vh) 2rem max(2rem, 4vh);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
@@ -1893,14 +1894,8 @@ body.cursor-dragging #cursor-ring {
   .format-overview {
     grid-template-columns: 1fr;
   }
-  .format-detail-item--mobile {
-    max-width: 900px;
-  }
   #format-detail {
-    padding: 1.25rem;
-    align-items: flex-start;
-    overflow-y: auto;
-    padding-top: calc(60px + env(safe-area-inset-top, 0px));
+    padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1rem 1.5rem;
   }
 }
 
