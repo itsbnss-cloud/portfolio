@@ -362,6 +362,7 @@ body.cursor-dragging #cursor-ring {
    ============================================================ */
 #hero {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   position: relative;
@@ -1353,7 +1354,7 @@ body.cursor-dragging #cursor-ring {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #333;
+  color: #4a4a4a;
   font-weight: 400;
 }
 
@@ -1362,7 +1363,7 @@ body.cursor-dragging #cursor-ring {
    ============================================================ */
 #lightbox {
   position: fixed;
-  inset: 100;
+  inset: 0;
   z-index: 1003;
   background: #000;
   pointer-events: none;
@@ -1780,6 +1781,10 @@ footer {
   }
   .contact-wrap {
     gap: 2.5rem;
+  }
+  /* Drag disabled on mobile — remove grab cursor */
+  .projects-grid {
+    cursor: default;
   }
 }
 

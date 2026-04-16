@@ -6,6 +6,27 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
+   iOS-SAFE SCROLL LOCK  (used by both mobile menu & lightbox)
+   ============================================================ */
+let savedScrollY = 0;
+
+function lockScroll() {
+  savedScrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top      = `-${savedScrollY}px`;
+  document.body.style.width    = '100%';
+  document.body.style.overflow = 'hidden';
+}
+
+function unlockScroll() {
+  document.body.style.position = '';
+  document.body.style.top      = '';
+  document.body.style.width    = '';
+  document.body.style.overflow = '';
+  window.scrollTo(0, savedScrollY);
+}
+
+/* ============================================================
    LOADER
    ============================================================ */
 function initLoader() {
@@ -128,23 +149,6 @@ function initNav() {
 
   sections.forEach(s => observer.observe(s));
 
-  // iOS-safe scroll lock helpers
-  let savedScrollY = 0;
-  function lockScroll() {
-    savedScrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${savedScrollY}px`;
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
-  }
-  function unlockScroll() {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.overflow = '';
-    window.scrollTo(0, savedScrollY);
-  }
-
   // Burger
   burger.addEventListener('click', () => {
     burger.classList.toggle('open');
@@ -164,12 +168,13 @@ function initNav() {
     });
   });
 
-  // Smooth scroll
+  // Smooth scroll — 50ms delay so iOS scroll unlock settles before navigation
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
       e.preventDefault();
       const target = document.querySelector(anchor.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!target) return;
+      setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
     });
   });
 }
@@ -525,7 +530,7 @@ function openLightbox(project) {
 
   buildLbReel(project);
   lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockScroll();
 }
 
 function closeLightbox() {
@@ -536,7 +541,7 @@ function closeLightbox() {
     onComplete: () => {
       lb.classList.remove('open');
       gsap.set(lb, { clearProps: 'opacity' });
-      document.body.style.overflow = '';
+      unlockScroll();
       if (lbReelOnScroll) reel.removeEventListener('scroll', lbReelOnScroll);
       reel.innerHTML = '';
       lbProject = null;
