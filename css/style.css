@@ -1688,7 +1688,7 @@ body.cursor-dragging #cursor-ring {
   }
 
   .projet-images {
-    gap: 1.25rem;
+    gap: 0.6rem;
   }
 }
 
