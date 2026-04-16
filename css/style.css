@@ -39,6 +39,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -747,6 +749,7 @@ body.cursor-dragging #cursor-ring {
    ============================================================ */
 #about {
   background: var(--s1);
+  overflow: clip;
 }
 
 .about-grid {
@@ -846,6 +849,7 @@ body.cursor-dragging #cursor-ring {
    ============================================================ */
 #services {
   background: var(--bg);
+  overflow: clip;
 }
 
 .services-grid {
@@ -1262,6 +1266,7 @@ body.cursor-dragging #cursor-ring {
    ============================================================ */
 #contact {
   background: var(--bg);
+  overflow: clip;
 }
 
 .contact-wrap {
