@@ -203,34 +203,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ── Gallery scroll animation + glow ── */
+  /* ── Gallery scroll animation (bidirectional) ── */
   let observerReady = false;
 
-  const glowObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-
-      if (observerReady) {
-        // Scrolled into view — animate in with GSAP then add glow
-        gsap.fromTo(entry.target,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
-            onComplete: () => entry.target.classList.add('glow-in') }
-        );
-      } else {
-        // Already visible on load — just glow after GSAP entrance finishes
-        setTimeout(() => entry.target.classList.add('glow-in'), 900);
-      }
-
-      glowObserver.unobserve(entry.target);
-    });
-  }, { threshold: 0.12 });
-
+  // Set initial hidden state on all gallery elements
   document.querySelectorAll('.projet-img-wrap, .format-card').forEach(el => {
-    glowObserver.observe(el);
+    gsap.set(el, { opacity: 0, y: 28 });
   });
 
-  // Mark observer as ready after initial cycle
+  const scrollObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const el    = entry.target;
+      const rect  = entry.boundingClientRect;
+      const fromBelow = rect.top > 0; // element is below viewport midpoint
+
+      if (entry.isIntersecting) {
+        // Entering viewport — elastic bounce in
+        gsap.fromTo(el,
+          { opacity: 0, y: fromBelow ? 40 : -30, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1,
+            duration: 0.85,
+            ease: 'back.out(1.6)',
+            overwrite: 'auto' }
+        );
+      } else if (observerReady) {
+        // Leaving viewport — quick snap out
+        if (fromBelow) {
+          gsap.to(el, { opacity: 0, y: 40, scale: 0.96, duration: 0.3, ease: 'back.in(1.4)', overwrite: 'auto' });
+        } else {
+          gsap.to(el, { opacity: 0, y: -30, scale: 0.96, duration: 0.3, ease: 'back.in(1.4)', overwrite: 'auto' });
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.projet-img-wrap, .format-card').forEach(el => {
+    scrollObserver.observe(el);
+  });
+
+  // Mark observer as ready after initial cycle so load-visible items don't hide
   requestAnimationFrame(() => requestAnimationFrame(() => { observerReady = true; }));
 
 });
