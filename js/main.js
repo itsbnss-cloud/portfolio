@@ -128,11 +128,28 @@ function initNav() {
 
   sections.forEach(s => observer.observe(s));
 
+  // iOS-safe scroll lock helpers
+  let savedScrollY = 0;
+  function lockScroll() {
+    savedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, savedScrollY);
+  }
+
   // Burger
   burger.addEventListener('click', () => {
     burger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
-    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    mobileMenu.classList.contains('open') ? lockScroll() : unlockScroll();
   });
 
   // Close mobile menu on link click
@@ -140,7 +157,7 @@ function initNav() {
     link.addEventListener('click', () => {
       burger.classList.remove('open');
       mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
+      unlockScroll();
     });
   });
 
