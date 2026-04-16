@@ -1332,8 +1332,16 @@ footer {
   .nav-links { display: none; }
   .nav-burger { display: flex; }
 
+  /* Touch devices: restore native cursor and pointer behavior */
+  #cursor-dot, #cursor-ring { display: none; }
+  body { cursor: auto; }
+  .nav-burger, .nav-brand, .nav-cta, .nav-link,
+  .btn-primary, .btn-ghost,
+  .filter-btn, .service-card, .project-card,
+  .social-link, .lb-close, .projects-nav-btn { cursor: pointer; }
+
   /* Hero */
-  .hero-container { flex-direction: column; text-align: center; padding-top: 8rem; padding-bottom: 4rem; }
+  .hero-container { flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; padding-top: 8rem; padding-bottom: 4rem; gap: 2.5rem; }
   .hero-left { max-width: 100%; }
   .hero-tag  { margin: 0 auto 1.75rem; }
   .hero-wordmark { margin: 0 auto 1.5rem; width: 240px; }
@@ -1446,11 +1454,7 @@ footer {
   .footer-socials { gap: 0.65rem; }
   .footer-inner { gap: 1.5rem; }
 
-  /* Cursor — hidden on touch */
-  #cursor-dot, #cursor-ring { display: none; }
-  body { cursor: auto; }
-  .nav-burger, .btn-primary, .btn-ghost, .filter-btn, .service-card, .project-card,
-  .social-link, .nav-brand, .nav-cta, .lb-close, .projects-nav-btn { cursor: pointer; }
+  /* (cursor rules already applied at 900px) */
 }
 
 /* ── 380px — very small phones ── */

@@ -520,38 +520,44 @@ function initLightbox() {
 
   close.addEventListener('click', closeLightbox);
 
-  // ── Drag-to-scroll (desktop) ────────────────────────────────
+  // ── Drag-to-scroll (desktop / mouse only) ───────────────────
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
   let isDragging    = false;
   let dragStartY    = 0;
   let dragScrollTop = 0;
   let hasDragged    = false;
 
-  reel.addEventListener('mouseenter', () => document.body.classList.add('cursor-drag'));
-  reel.addEventListener('mouseleave', () => { if (!isDragging) document.body.classList.remove('cursor-drag'); });
+  if (!isTouch) {
+    reel.addEventListener('mouseenter', () => document.body.classList.add('cursor-drag'));
+    reel.addEventListener('mouseleave', () => { if (!isDragging) document.body.classList.remove('cursor-drag'); });
+  }
 
-  reel.addEventListener('mousedown', e => {
+  if (!isTouch) reel.addEventListener('mousedown', e => {
     if (e.button !== 0) return;
     isDragging    = true;
     hasDragged    = false;
     dragStartY    = e.clientY;
     dragScrollTop = reel.scrollTop;
     document.body.classList.add('cursor-dragging');
-    e.preventDefault(); // prevent text selection
+    e.preventDefault(); // prevent text selection — desktop only
   });
 
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    const dy = e.clientY - dragStartY;
-    if (Math.abs(dy) > 4) hasDragged = true;
-    reel.scrollTop = dragScrollTop - dy;
-  });
+  if (!isTouch) {
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dy = e.clientY - dragStartY;
+      if (Math.abs(dy) > 4) hasDragged = true;
+      reel.scrollTop = dragScrollTop - dy;
+    });
 
-  window.addEventListener('mouseup', () => {
-    if (!isDragging) return;
-    isDragging = false;
-    document.body.classList.remove('cursor-dragging');
-    if (!reel.matches(':hover')) document.body.classList.remove('cursor-drag');
-  });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      document.body.classList.remove('cursor-dragging');
+      if (!reel.matches(':hover')) document.body.classList.remove('cursor-drag');
+    });
+  }
 
   // Click on empty space → close (only if not a drag)
   reel.addEventListener('click', e => {
