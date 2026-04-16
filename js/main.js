@@ -161,7 +161,7 @@ function initScrollReveal() {
   const revealEls = document.querySelectorAll('[data-reveal]');
 
   const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
         const delay = entry.target.dataset.delay || 0;
         setTimeout(() => {
@@ -204,17 +204,19 @@ function initScrollAnimations() {
     ease: 'power2.out'
   });
 
-  // Hero parallax
-  gsap.to('.hero-character', {
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1
-    },
-    y: -80,
-    ease: 'none'
-  });
+  // Hero parallax — desktop only (avoid jank on mobile)
+  if (window.innerWidth >= 768) {
+    gsap.to('.hero-character', {
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1
+      },
+      y: -80,
+      ease: 'none'
+    });
+  }
 }
 
 /* ============================================================
@@ -376,7 +378,9 @@ function initProjects() {
     btn.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   });
 
-  // Drag-to-scroll on projects grid (desktop)
+  // Drag-to-scroll on projects grid (desktop only — touch devices use native scroll)
+  if (window.innerWidth < 768) return;
+
   let pgDragging = false, pgStartX = 0, pgScrollLeft = 0, pgDragged = false;
 
   grid.addEventListener('mousedown', e => {
