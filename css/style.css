@@ -284,6 +284,8 @@ body.cursor-dragging #cursor-ring {
   border: none;
   cursor: none;
   padding: 4px;
+  position: relative;
+  z-index: 1005;
 }
 
 .nav-burger span {
