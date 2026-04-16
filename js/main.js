@@ -433,35 +433,35 @@ function updateLbCounter() {
 function navigateLb(dir) {
   if (!lbProject) return;
   const n = lbProject.gallery.length;
-  const next = Math.max(0, Math.min(n - 1, lbIndex + dir));
-  if (next === lbIndex) return;
+  const next = (lbIndex + dir + n) % n; // wrap around infinitely
   const reel = document.getElementById('lb-reel');
-  const slides = reel.querySelectorAll('.lb-slide');
-  slides[next]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const center = reel.scrollTop + reel.clientHeight / 2;
+  // Find the nearest clone of target index to current position
+  const candidates = [...reel.querySelectorAll(`.lb-slide[data-index="${next}"]`)];
+  if (!candidates.length) return;
+  let closest = candidates[0], closestDist = Infinity;
+  candidates.forEach(s => {
+    const dist = Math.abs((s.offsetTop + s.offsetHeight / 2) - center);
+    if (dist < closestDist) { closestDist = dist; closest = s; }
+  });
+  closest.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function buildLbReel(project) {
   const reel = document.getElementById('lb-reel');
-
-  // Remove previous scroll listener
   if (lbReelOnScroll) reel.removeEventListener('scroll', lbReelOnScroll);
 
-  reel.innerHTML = project.gallery.map((src, i) => `
+  const slideHtml = (src, i, eager) => `
     <div class="lb-slide" data-index="${i}">
-      <img src="${src}" alt="${project.title}" class="lb-slide-img" loading="${i === 0 ? 'eager' : 'lazy'}" />
-    </div>
-  `).join('');
+      <img src="${src}" alt="${project.title}" class="lb-slide-img" loading="${eager ? 'eager' : 'lazy'}" />
+    </div>`;
 
-  reel.scrollTop = 0;
+  // [clone A] [original] [clone B] — triple set for infinite loop
+  const origHtml  = project.gallery.map((src, i) => slideHtml(src, i, i === 0)).join('');
+  const cloneHtml = project.gallery.map((src, i) => slideHtml(src, i, false)).join('');
+  reel.innerHTML  = cloneHtml + origHtml + cloneHtml;
 
-  // Activate first slide after paint
-  requestAnimationFrame(() => {
-    const first = reel.querySelector('.lb-slide');
-    if (first) first.classList.add('is-active');
-  });
-
-  // Track which slide is centered
-  lbReelOnScroll = () => {
+  function updateActiveSlide() {
     const center = reel.scrollTop + reel.clientHeight / 2;
     const slides = reel.querySelectorAll('.lb-slide');
     let closest = null, closestDist = Infinity;
@@ -472,14 +472,25 @@ function buildLbReel(project) {
     slides.forEach(s => s.classList.toggle('is-active', s === closest));
     if (closest) {
       const ni = parseInt(closest.dataset.index);
-      if (ni !== lbIndex) {
-        lbIndex = ni;
-        updateLbCounter();
-        updateLbProgress();
-      }
+      if (ni !== lbIndex) { lbIndex = ni; updateLbCounter(); updateLbProgress(); }
     }
-  };
-  reel.addEventListener('scroll', lbReelOnScroll, { passive: true });
+  }
+
+  // Start at original set (skip clone A)
+  requestAnimationFrame(() => {
+    const setH = reel.scrollHeight / 3;
+    reel.scrollTop = setH;
+    updateActiveSlide();
+
+    lbReelOnScroll = () => {
+      // Infinite loop jump
+      const sh = reel.scrollHeight / 3;
+      if (reel.scrollTop >= sh * 2)  reel.scrollTop -= sh;
+      else if (reel.scrollTop <= 0)  reel.scrollTop += sh;
+      updateActiveSlide();
+    };
+    reel.addEventListener('scroll', lbReelOnScroll, { passive: true });
+  });
 }
 
 function openLightbox(project) {
