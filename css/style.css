@@ -112,6 +112,32 @@ section {
   box-shadow: 0 0 12px var(--y-glow);
 }
 
+/* ── Film grain overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 9985;
+}
+
+/* ── Scroll progress bar ── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--y), var(--y2));
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 0 12px var(--y-glow), 0 0 5px var(--y);
+}
+
 /* ============================================================
    CURSOR
    ============================================================ */
@@ -513,10 +539,29 @@ body.cursor-dragging #cursor-ring {
 }
 
 .hero-wordmark {
-  width: 320px;
+  width: 400px;
   height: auto;
   margin-bottom: 1.5rem;
   opacity: 0;
+}
+
+/* ── Hero background large text ── */
+.hero-bg-text {
+  position: absolute;
+  bottom: -0.1em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Moga", "Montserrat", sans-serif;
+  font-size: clamp(80px, 14vw, 190px);
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245, 166, 35, 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 .hero-sub {
@@ -895,9 +940,9 @@ body.cursor-dragging #cursor-ring {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at 50% 0%,
-    rgba(245, 166, 35, 0.05),
-    transparent 70%
+    circle at var(--spot-x, 50%) var(--spot-y, 0%),
+    rgba(245, 166, 35, 0.12),
+    transparent 65%
   );
   opacity: 0;
   transition: opacity 0.4s;
@@ -915,8 +960,9 @@ body.cursor-dragging #cursor-ring {
 }
 
 .service-card--featured {
-  border-color: var(--border-y);
-  background: linear-gradient(160deg, #151515, #111);
+  border-color: rgba(245, 166, 35, 0.35);
+  background: linear-gradient(160deg, #1c1508, #110e06);
+  box-shadow: 0 0 60px rgba(245, 166, 35, 0.05) inset, 0 8px 40px rgba(245, 166, 35, 0.06);
 }
 
 .service-card--featured::before {
@@ -1012,18 +1058,6 @@ body.cursor-dragging #cursor-ring {
   color: var(--muted2);
 }
 
-.service-arrow {
-  font-size: 18px;
-  color: var(--muted);
-  transition: color 0.3s, transform 0.3s;
-  position: relative;
-  z-index: 1;
-}
-
-.service-card:hover .service-arrow {
-  color: var(--y);
-  transform: translateX(6px);
-}
 
 /* ============================================================
    PROJECTS
@@ -1059,6 +1093,17 @@ body.cursor-dragging #cursor-ring {
   z-index: 1;
   width: 100%;
   padding: 2rem 0 0;
+}
+
+/* Fade on right edge — hints there's more to scroll */
+.projects-scroll-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 120px;
+  background: linear-gradient(to right, transparent, var(--s1));
+  pointer-events: none;
+  z-index: 3;
 }
 
 .filter-bar {
@@ -1157,9 +1202,10 @@ body.cursor-dragging #cursor-ring {
   position: relative;
   background: var(--s3);
   cursor: none;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  transition: box-shadow 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 
 .project-card:hover {
   transform: scale(1.02);
@@ -1640,6 +1686,10 @@ body.cursor-dragging #cursor-ring {
   .projet-header {
     max-width: calc(100% - 100px);
   }
+
+  .projet-images {
+    gap: 1.25rem;
+  }
 }
 
 .projet-title {
@@ -1692,6 +1742,14 @@ body.cursor-dragging #cursor-ring {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
+  transition: box-shadow 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.projet-img-wrap.glow-in,
+.format-card.glow-in {
+  box-shadow:
+    0 0 50px rgba(245, 166, 35, 0.09),
+    0 0 100px rgba(245, 166, 35, 0.05);
 }
 
 .projet-img-hero {
@@ -1745,6 +1803,7 @@ body.cursor-dragging #cursor-ring {
   overflow: hidden;
   cursor: pointer;
   aspect-ratio: 16 / 5;
+  transition: box-shadow 1.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .format-card img {
@@ -1888,6 +1947,10 @@ body.cursor-dragging #cursor-ring {
 
 .format-detail-item--mobile {
   max-width: 400px;
+}
+
+.format-detail-item--mobile-wide {
+  max-width: 700px;
 }
 
 @media (max-width: 768px) {
@@ -2046,6 +2109,72 @@ footer {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-available {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4ade80;
+  letter-spacing: 0.05em;
+}
+
+.footer-available-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.9);
+  flex-shrink: 0;
+  animation: blink 2s infinite;
+}
+
+/* Tools tags in about section */
+.about-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.tool-tag {
+  padding: 5px 14px;
+  background: transparent;
+  border: 1px solid rgba(245, 166, 35, 0.18);
+  border-radius: 100px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted2);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.tool-tag:hover {
+  border-color: var(--y);
+  color: var(--y);
+}
+
+.footer-wm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Moga", "Montserrat", sans-serif;
+  font-size: clamp(90px, 16vw, 210px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.045);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .footer-logo {
@@ -2221,6 +2350,12 @@ footer {
     text-align: center;
     flex-direction: column;
     align-items: center;
+  }
+  .about-tools {
+    justify-content: center;
+  }
+  .hero-bg-text {
+    font-size: clamp(56px, 18vw, 100px);
   }
 
   /* Touch — prevent double-tap zoom on all interactive elements */

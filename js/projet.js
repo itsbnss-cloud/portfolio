@@ -57,12 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
       detailCap.textContent  = pair.web.caption || '';
       detailWeb.src          = pair.web.src;
       detailWeb.alt          = pair.web.caption + ' — Web';
+      const mobItem = detailMob.closest('.format-detail-item');
       if (pair.mobile) {
-        detailMob.src        = pair.mobile.src;
-        detailMob.alt        = pair.mobile.caption + ' — Mobile';
-        detailMob.closest('.format-detail-item').style.display = '';
+        detailMob.src  = pair.mobile.src;
+        detailMob.alt  = pair.mobile.caption + ' — Mobile';
+        mobItem.style.display = '';
+        mobItem.classList.toggle('format-detail-item--mobile-wide', !!pair.mobile.wide);
       } else {
-        detailMob.closest('.format-detail-item').style.display = 'none';
+        mobItem.style.display = 'none';
+        mobItem.classList.remove('format-detail-item--mobile-wide');
       }
       detail.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -199,5 +202,35 @@ document.addEventListener('DOMContentLoaded', () => {
       el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
   }
+
+  /* ── Gallery scroll animation + glow ── */
+  let observerReady = false;
+
+  const glowObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+
+      if (observerReady) {
+        // Scrolled into view — animate in with GSAP then add glow
+        gsap.fromTo(entry.target,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
+            onComplete: () => entry.target.classList.add('glow-in') }
+        );
+      } else {
+        // Already visible on load — just glow after GSAP entrance finishes
+        setTimeout(() => entry.target.classList.add('glow-in'), 900);
+      }
+
+      glowObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.projet-img-wrap, .format-card').forEach(el => {
+    glowObserver.observe(el);
+  });
+
+  // Mark observer as ready after initial cycle
+  requestAnimationFrame(() => requestAnimationFrame(() => { observerReady = true; }));
 
 });

@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Jeune Designer — Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="assets/Logo Jeune designer/Icone/logojd.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=5" />
   </head>
   <body>
     <!-- ===== LOADER ===== -->
@@ -24,6 +25,9 @@
         <div class="loader-fill" id="loader-fill"></div>
       </div>
     </div>
+
+    <!-- ===== SCROLL PROGRESS ===== -->
+    <div id="scroll-progress" aria-hidden="true"></div>
 
     <!-- ===== CURSOR ===== -->
     <div id="cursor-dot"></div>
@@ -110,6 +114,7 @@
         <div class="orb orb2"></div>
         <div class="orb orb3"></div>
       </div>
+      <div class="hero-bg-text" aria-hidden="true">GRAPHISTE</div>
       <div class="hero-container">
         <div class="hero-left">
           <div class="hero-tag">
@@ -155,10 +160,6 @@
                 alt="Jeune Designer"
                 class="about-character"
               />
-              <div class="about-badge-float">
-                <span class="badge-num">2+</span>
-                <span class="badge-txt">ans d'expérience</span>
-              </div>
             </div>
           </div>
           <div class="about-content" data-reveal="right">
@@ -188,6 +189,10 @@
                 ><span class="stat-plus">%</span>
                 <span class="stat-label">Satisfaction client</span>
               </div>
+            </div>
+            <div class="about-tools">
+              <span class="tool-tag">Photoshop</span>
+              <span class="tool-tag">Illustrator</span>
             </div>
           </div>
         </div>
@@ -224,7 +229,6 @@
             <div class="service-tags">
               <span>Logo</span><span>DA</span><span>Branding</span>
             </div>
-            <div class="service-arrow">→</div>
           </div>
           <div class="service-card service-card--featured">
             <div class="service-number">02</div>
@@ -239,7 +243,6 @@
             <div class="service-tags">
               <span>Menu Board</span><span>Flyer</span><span>Digital</span>
             </div>
-            <div class="service-arrow">→</div>
           </div>
           <div class="service-card">
             <div class="service-number">03</div>
@@ -264,7 +267,6 @@
             <div class="service-tags">
               <span>Packaging</span><span>Ambiance</span><span>Cohérence</span>
             </div>
-            <div class="service-arrow">→</div>
           </div>
         </div>
       </div>
@@ -403,11 +405,16 @@
     <footer>
       <div class="container">
         <div class="footer-inner">
+          <div class="footer-wm" aria-hidden="true">JD</div>
           <img
             src="assets/Fichier 5Jeune designer logo.png"
             alt="JD"
             class="footer-logo"
           />
+          <div class="footer-available">
+            <span class="footer-available-dot"></span>
+            Disponible pour nouveaux projets
+          </div>
           <div class="footer-socials">
             <a
               href="https://www.behance.net/ibrahimbousaad2"
@@ -481,7 +488,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="js/projects.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/projects.js?v=5"></script>
+    <script src="js/main.js?v=5"></script>
   </body>
 </html>

@@ -30,9 +30,17 @@ function unlockScroll() {
    LOADER
    ============================================================ */
 function initLoader() {
-  const loader    = document.getElementById('loader');
-  const logo      = loader.querySelector('.loader-logo');
-  const fill      = document.getElementById('loader-fill');
+  const loader = document.getElementById('loader');
+
+  // Skip loader if already seen this session
+  if (sessionStorage.getItem('loaderSeen')) {
+    loader.style.display = 'none';
+    initHeroAnimation();
+    return;
+  }
+
+  const logo = loader.querySelector('.loader-logo');
+  const fill = document.getElementById('loader-fill');
 
   const tl = gsap.timeline({
     onComplete: () => {
@@ -42,6 +50,7 @@ function initLoader() {
         ease: 'power3.inOut',
         onComplete: () => {
           loader.style.display = 'none';
+          sessionStorage.setItem('loaderSeen', '1');
           initHeroAnimation();
         }
       });
@@ -294,6 +303,38 @@ function initCounters() {
 }
 
 /* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+function initScrollProgress() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = max > 0 ? `${(window.scrollY / max * 100).toFixed(2)}%` : '0%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+/* ============================================================
+   SERVICE CARD SPOTLIGHT
+   ============================================================ */
+function initServiceSpotlight() {
+  if (window.innerWidth < 900) return;
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--spot-x', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
+      card.style.setProperty('--spot-y', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.removeProperty('--spot-x');
+      card.style.removeProperty('--spot-y');
+    });
+  });
+}
+
+/* ============================================================
    MAGNETIC BUTTONS
    ============================================================ */
 function initMagnetic() {
@@ -325,6 +366,31 @@ function attachCardEvents(card) {
     const id = card.dataset.id;
     if (id) window.location.href = `projet.html?id=${id}`;
   });
+
+  // 3D tilt on desktop
+  if (window.innerWidth >= 900) {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      gsap.to(card, {
+        rotateY: x * 14,
+        rotateX: -y * 10,
+        transformPerspective: 900,
+        scale: 1.03,
+        duration: 0.4,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, {
+        rotateX: 0, rotateY: 0, scale: 1,
+        duration: 0.7, ease: 'elastic.out(1, 0.5)',
+        overwrite: 'auto'
+      });
+    });
+  }
 }
 
 function renderProjects(filter = 'all') {
@@ -665,14 +731,16 @@ function initForm() {
    INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  try { initLoader(); }        catch(e) { console.error('initLoader:', e); }
-  try { initCursor(); }        catch(e) { console.error('initCursor:', e); }
-  try { initNav(); }           catch(e) { console.error('initNav:', e); }
-  try { initScrollReveal(); }  catch(e) { console.error('initScrollReveal:', e); }
+  try { initLoader(); }           catch(e) { console.error('initLoader:', e); }
+  try { initScrollProgress(); }   catch(e) { console.error('initScrollProgress:', e); }
+  try { initCursor(); }           catch(e) { console.error('initCursor:', e); }
+  try { initNav(); }              catch(e) { console.error('initNav:', e); }
+  try { initScrollReveal(); }     catch(e) { console.error('initScrollReveal:', e); }
   try { initScrollAnimations(); } catch(e) { console.error('initScrollAnimations:', e); }
-  try { initCounters(); }      catch(e) { console.error('initCounters:', e); }
-  try { initMagnetic(); }      catch(e) { console.error('initMagnetic:', e); }
-  try { initProjects(); }      catch(e) { console.error('initProjects:', e); }
-  try { initLightbox(); }      catch(e) { console.error('initLightbox:', e); }
-  try { initForm(); }          catch(e) { console.error('initForm:', e); }
+  try { initCounters(); }         catch(e) { console.error('initCounters:', e); }
+  try { initMagnetic(); }         catch(e) { console.error('initMagnetic:', e); }
+  try { initServiceSpotlight(); } catch(e) { console.error('initServiceSpotlight:', e); }
+  try { initProjects(); }         catch(e) { console.error('initProjects:', e); }
+  try { initLightbox(); }         catch(e) { console.error('initLightbox:', e); }
+  try { initForm(); }             catch(e) { console.error('initForm:', e); }
 });
