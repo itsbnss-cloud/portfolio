@@ -92,6 +92,20 @@ const projects = [
   },
 
   {
+    id: 8,
+    title: "Nuage Burger",
+    category: "menu",
+    tag: "Menu Board",
+    thumb: "assets/travaux/Nuage Burger/PP - Nuage.jpg",
+    gallery: [
+      "assets/travaux/Nuage Burger/PP - Nuage.jpg",
+      "assets/travaux/Nuage Burger/MB 1 - Nuage.jpg",
+      "assets/travaux/Nuage Burger/MB 2 - Nuage.jpg",
+      "assets/travaux/Nuage Burger/MB 3 - Nuage.jpg"
+    ]
+  },
+
+  {
     id: 7,
     title: "Evox Performance",
     category: "auto",
