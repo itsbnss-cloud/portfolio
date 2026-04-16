@@ -90,16 +90,31 @@ function initCursor() {
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
 
-  if (window.innerWidth < 480) return;
+  // Only on desktop — matches the CSS 900px hide breakpoint
+  if (window.innerWidth <= 900) return;
+
+  // GSAP-native centering: xPercent/yPercent stack correctly with x/y
+  gsap.set([dot, ring], { xPercent: -50, yPercent: -50 });
 
   let mx = 0, my = 0;
   let rx = 0, ry = 0;
+  let visible = false;
 
   document.addEventListener('mousemove', e => {
     mx = e.clientX;
     my = e.clientY;
     gsap.set(dot, { x: mx, y: my });
+
+    // Fade in on first real mouse move (avoids cursor flash at 0,0 on load)
+    if (!visible) {
+      visible = true;
+      gsap.to([dot, ring], { opacity: 1, duration: 0.35 });
+    }
   });
+
+  // Hide cursor when mouse leaves the window
+  document.addEventListener('mouseleave', () => gsap.to([dot, ring], { opacity: 0, duration: 0.2 }));
+  document.addEventListener('mouseenter', () => { if (visible) gsap.to([dot, ring], { opacity: 1, duration: 0.2 }); });
 
   // Ring follows with lerp
   function followRing() {
