@@ -89,6 +89,30 @@ const projects = [
       "assets/travaux/Ruspee's/MB Kids.jpg",
       "assets/travaux/Ruspee's/MB Poulet.jpg"
     ]
+  },
+
+  {
+    id: 7,
+    title: "Evox Performance",
+    category: "auto",
+    tag: "Bannières Site Web",
+    thumb: "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_Web.jpg",
+    gallery: [
+      "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_Web.jpg",
+      "assets/travaux/Evox Performance/Akrapovic banner/Slider Web - Slide AKRA PORSCHE.jpg",
+      "assets/travaux/Evox Performance/BMW Banner/Slide BMW WEB2.jpg",
+      "assets/travaux/Evox Performance/Performance/Banniere Performance 1WEB.jpg",
+      "assets/travaux/Evox Performance/Chassis/Banniere chassis web.jpg",
+      "assets/travaux/Evox Performance/Echappement/Banniere_Echappements_WEB.jpg",
+      "assets/travaux/Evox Performance/Accessoires/Banniere Accesoires WEB.jpg",
+      "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_mobile.jpg",
+      "assets/travaux/Evox Performance/Akrapovic banner/Slider Mobile - AKRAPOVIC.jpg",
+      "assets/travaux/Evox Performance/BMW Banner/Slide mobile BMW2.jpg",
+      "assets/travaux/Evox Performance/Performance/banniere Perforamance mobile.jpg",
+      "assets/travaux/Evox Performance/Chassis/Baniere Chassis Mobile2.jpg",
+      "assets/travaux/Evox Performance/Echappement/Banniere Echappements Mobilefinal.jpg",
+      "assets/travaux/Evox Performance/Accessoires/Banniere Accessoires Mobile.jpg"
+    ]
   }
 
 ];
