@@ -1891,7 +1891,7 @@ body.cursor-dragging #cursor-ring {
 }
 
 .format-detail-item--mobile {
-  max-width: 320px;
+  max-width: 520px;
 }
 
 @media (max-width: 768px) {
@@ -1899,7 +1899,7 @@ body.cursor-dragging #cursor-ring {
     grid-template-columns: 1fr;
   }
   .format-detail-item--mobile {
-    max-width: 240px;
+    max-width: 360px;
   }
   #format-detail {
     padding: 1.25rem;
