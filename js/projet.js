@@ -27,44 +27,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const isStructured = project.gallery.length > 0 && typeof project.gallery[0] === 'object';
 
   if (isStructured) {
-    // Group pairs: each Web + its Mobile version together
+    // Build pairs: [{ web, mobile }]
     const pairs = [];
     for (let i = 0; i < project.gallery.length; i += 2) {
-      pairs.push(project.gallery.slice(i, i + 2));
+      pairs.push({ web: project.gallery[i], mobile: project.gallery[i + 1] || null });
     }
 
-    container.innerHTML = pairs.map((pair, pairIdx) => {
-      const caption = pair[0].caption || '';
-      const items = pair.map((item, i) => {
-        const isMobile = item.label === 'Mobile';
-        const isFirst  = pairIdx === 0 && i === 0;
-        return `
-          <div class="projet-img-wrap${isFirst ? ' projet-img-hero' : ''}${isMobile ? ' projet-img-mobile' : ''}">
-            <span class="projet-format-badge projet-format-badge--${item.label.toLowerCase()}">${item.label}</span>
-            <img
-              src="${item.src}"
-              alt="${project.title} — ${item.caption} ${item.label}"
-              loading="${isFirst ? 'eager' : 'lazy'}"
-            />
-          </div>`;
-      }).join('');
+    // Overview: only web banners as clickable cards
+    container.innerHTML = `<div class="format-overview">${
+      pairs.map((pair, i) => `
+        <div class="format-card" data-pair="${i}" tabindex="0" role="button" aria-label="Voir ${pair.web.caption}">
+          <img src="${pair.web.src}" alt="${project.title} — ${pair.web.caption}" loading="${i < 3 ? 'eager' : 'lazy'}" />
+          <div class="format-card-overlay">
+            <span class="format-card-caption">${pair.web.caption}</span>
+            <span class="format-card-hint">Web + Mobile →</span>
+          </div>
+        </div>
+      `).join('')
+    }</div>`;
 
-      return `
-        <div class="projet-pair">
-          ${caption ? `<p class="projet-pair-caption">${caption}</p>` : ''}
-          <div class="projet-pair-grid">${items}</div>
-        </div>`;
-    }).join('');
+    // Click → open pair detail overlay
+    const detail    = document.getElementById('format-detail');
+    const detailWeb = document.getElementById('format-detail-web');
+    const detailMob = document.getElementById('format-detail-mob');
+    const detailCap = document.getElementById('format-detail-caption');
+    const detailClose = document.getElementById('format-detail-close');
+
+    function openDetail(pair) {
+      detailCap.textContent  = pair.web.caption || '';
+      detailWeb.src          = pair.web.src;
+      detailWeb.alt          = pair.web.caption + ' — Web';
+      if (pair.mobile) {
+        detailMob.src        = pair.mobile.src;
+        detailMob.alt        = pair.mobile.caption + ' — Mobile';
+        detailMob.closest('.format-detail-item').style.display = '';
+      } else {
+        detailMob.closest('.format-detail-item').style.display = 'none';
+      }
+      detail.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+      detail.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    container.querySelectorAll('.format-card').forEach(card => {
+      card.addEventListener('click', () => openDetail(pairs[+card.dataset.pair]));
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openDetail(pairs[+card.dataset.pair]); });
+    });
+
+    detailClose.addEventListener('click', closeDetail);
+    detail.addEventListener('click', e => { if (e.target === detail) closeDetail(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 
   } else {
     // Legacy: plain string gallery
     container.innerHTML = project.gallery.map((src, i) => `
       <div class="projet-img-wrap${i === 0 ? ' projet-img-hero' : ''}">
-        <img
-          src="${src}"
-          alt="${project.title} — visuel ${i + 1}"
-          loading="${i < 2 ? 'eager' : 'lazy'}"
-        />
+        <img src="${src}" alt="${project.title} — visuel ${i + 1}" loading="${i < 2 ? 'eager' : 'lazy'}" />
       </div>
     `).join('');
   }

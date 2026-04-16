@@ -1741,6 +1741,175 @@ body.cursor-dragging #cursor-ring {
   border: 1px solid rgba(160, 196, 255, 0.4);
 }
 
+/* ── Format overview — web banner cards ── */
+.format-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+.format-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16 / 5;
+}
+
+.format-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.format-card:hover img {
+  transform: scale(1.04);
+}
+
+.format-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.25rem 1.25rem 1rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.format-card:hover .format-card-overlay {
+  opacity: 1;
+}
+
+.format-card-caption {
+  font-family: "Moga", "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.format-card-hint {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--y);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* ── Format detail overlay ── */
+#format-detail {
+  position: fixed;
+  inset: 0;
+  z-index: 1010;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+#format-detail.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.format-detail-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.format-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.format-detail-caption {
+  font-family: "Moga", "Montserrat", sans-serif;
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.format-detail-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.format-detail-close:hover {
+  background: rgba(255,255,255,0.16);
+}
+
+.format-detail-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.format-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.format-detail-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.format-detail-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .format-overview {
+    grid-template-columns: 1fr;
+  }
+  .format-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .format-detail-item--mobile {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+  #format-detail {
+    padding: 1.25rem;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding-top: calc(60px + env(safe-area-inset-top, 0px));
+  }
+}
+
 /* Pagination */
 #projet-pagination {
   background: var(--s1);
