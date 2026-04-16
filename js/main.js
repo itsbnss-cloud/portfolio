@@ -353,39 +353,10 @@ function renderProjects(filter = 'all') {
     </div>
   `).join('');
 
-  grid.querySelectorAll('.project-card').forEach(attachCardEvents);
+  const cards = [...grid.querySelectorAll('.project-card')];
+  cards.forEach(attachCardEvents);
 
-  // Infinite scroll — clone set before + after
-  const origCards = [...grid.querySelectorAll('.project-card')];
-
-  function makeCloneSet() {
-    const frag = document.createDocumentFragment();
-    origCards.forEach(card => {
-      const cl = card.cloneNode(true);
-      cl.setAttribute('aria-hidden', 'true');
-      attachCardEvents(cl);
-      frag.appendChild(cl);
-    });
-    return frag;
-  }
-
-  grid.appendChild(makeCloneSet());  // clone B at end
-  grid.prepend(makeCloneSet());      // clone A at start
-
-  // Start at original set (skip clone A)
-  requestAnimationFrame(() => {
-    const setW = grid.scrollWidth / 3;
-    grid.scrollLeft = setW;
-
-    pgInfiniteHandler = () => {
-      const sw = grid.scrollWidth / 3;
-      if (grid.scrollLeft >= sw * 2) grid.scrollLeft -= sw;
-      else if (grid.scrollLeft <= 0)  grid.scrollLeft += sw;
-    };
-    grid.addEventListener('scroll', pgInfiniteHandler, { passive: true });
-  });
-
-  gsap.from(origCards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity' });
+  try { gsap.from(cards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity' }); } catch(e) {}
 }
 
 function initProjects() {
