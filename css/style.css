@@ -1688,7 +1688,11 @@ body.cursor-dragging #cursor-ring {
   }
 
   .projet-images {
-    gap: 0.6rem;
+    gap: 5px;
+  }
+
+  #projet-gallery .container {
+    padding: 0 6px;
   }
 }
 
