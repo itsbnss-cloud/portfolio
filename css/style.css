@@ -1659,47 +1659,86 @@ body.cursor-dragging #cursor-ring {
 }
 
 .projet-images {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* ── Pair (Web + Mobile grouped) ── */
+.projet-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.projet-pair-caption {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted2);
+  padding-left: 2px;
+}
+
+.projet-pair-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 320px;
+  align-items: start;
+  gap: 1.25rem;
 }
 
-/* First image — full width hero */
-.projet-img-hero {
-  grid-column: 1 / -1;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-/* Rest in 2 columns */
-.projet-img-wrap:not(.projet-img-hero) {
+/* ── Image wrappers ── */
+.projet-img-wrap {
+  position: relative;
   border-radius: 16px;
   overflow: hidden;
 }
 
-/* 2-col grid starting from 2nd image */
-.projet-img-wrap:nth-child(n + 2) {
-  grid-column: auto;
-}
-
-.projet-images {
-  grid-template-columns: 1fr 1fr;
-}
-
 .projet-img-hero {
-  grid-column: 1 / -1;
+  border-radius: 20px;
+}
+
+.projet-img-mobile {
+  border-radius: 16px;
 }
 
 .projet-img-wrap img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projet-img-wrap:hover img {
   transform: scale(1.02);
+}
+
+/* ── Format badge (Web / Mobile) ── */
+.projet-format-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.projet-format-badge--web {
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--y);
+  border: 1px solid rgba(245, 166, 35, 0.4);
+}
+
+.projet-format-badge--mobile {
+  background: rgba(0, 0, 0, 0.55);
+  color: #a0c4ff;
+  border: 1px solid rgba(160, 196, 255, 0.4);
 }
 
 /* Pagination */
@@ -1799,11 +1838,14 @@ body.cursor-dragging #cursor-ring {
     padding: 7rem 0 2.5rem;
   }
   .projet-images {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 2.5rem;
   }
-  .projet-img-hero {
-    grid-column: 1;
+  .projet-pair-grid {
+    grid-template-columns: 1fr;
+  }
+  .projet-img-mobile {
+    max-width: 280px;
+    margin: 0 auto;
   }
   .projet-nav-wrap {
     gap: 0.75rem;

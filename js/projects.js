@@ -98,20 +98,20 @@ const projects = [
     tag: "Bannières Site Web",
     thumb: "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_Web.jpg",
     gallery: [
-      "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_Web.jpg",
-      "assets/travaux/Evox Performance/Akrapovic banner/Slider Web - Slide AKRA PORSCHE.jpg",
-      "assets/travaux/Evox Performance/BMW Banner/Slide BMW WEB2.jpg",
-      "assets/travaux/Evox Performance/Performance/Banniere Performance 1WEB.jpg",
-      "assets/travaux/Evox Performance/Chassis/Banniere chassis web.jpg",
-      "assets/travaux/Evox Performance/Echappement/Banniere_Echappements_WEB.jpg",
-      "assets/travaux/Evox Performance/Accessoires/Banniere Accesoires WEB.jpg",
-      "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_mobile.jpg",
-      "assets/travaux/Evox Performance/Akrapovic banner/Slider Mobile - AKRAPOVIC.jpg",
-      "assets/travaux/Evox Performance/BMW Banner/Slide mobile BMW2.jpg",
-      "assets/travaux/Evox Performance/Performance/banniere Perforamance mobile.jpg",
-      "assets/travaux/Evox Performance/Chassis/Baniere Chassis Mobile2.jpg",
-      "assets/travaux/Evox Performance/Echappement/Banniere Echappements Mobilefinal.jpg",
-      "assets/travaux/Evox Performance/Accessoires/Banniere Accessoires Mobile.jpg"
+      { src: "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_Web.jpg",                        label: "Web",    caption: "Bannière Accueil" },
+      { src: "assets/travaux/Evox Performance/Evox Banner/Banniere_Evox_mobile.jpg",                     label: "Mobile", caption: "Bannière Accueil" },
+      { src: "assets/travaux/Evox Performance/Akrapovic banner/Slider Web - Slide AKRA PORSCHE.jpg",     label: "Web",    caption: "Akrapovič" },
+      { src: "assets/travaux/Evox Performance/Akrapovic banner/Slider Mobile - AKRAPOVIC.jpg",           label: "Mobile", caption: "Akrapovič" },
+      { src: "assets/travaux/Evox Performance/BMW Banner/Slide BMW WEB2.jpg",                            label: "Web",    caption: "BMW" },
+      { src: "assets/travaux/Evox Performance/BMW Banner/Slide mobile BMW2.jpg",                         label: "Mobile", caption: "BMW" },
+      { src: "assets/travaux/Evox Performance/Performance/Banniere Performance 1WEB.jpg",                label: "Web",    caption: "Performance" },
+      { src: "assets/travaux/Evox Performance/Performance/banniere Perforamance mobile.jpg",             label: "Mobile", caption: "Performance" },
+      { src: "assets/travaux/Evox Performance/Chassis/Banniere chassis web.jpg",                         label: "Web",    caption: "Chassis" },
+      { src: "assets/travaux/Evox Performance/Chassis/Baniere Chassis Mobile2.jpg",                      label: "Mobile", caption: "Chassis" },
+      { src: "assets/travaux/Evox Performance/Echappement/Banniere_Echappements_WEB.jpg",                label: "Web",    caption: "Échappements" },
+      { src: "assets/travaux/Evox Performance/Echappement/Banniere Echappements Mobilefinal.jpg",        label: "Mobile", caption: "Échappements" },
+      { src: "assets/travaux/Evox Performance/Accessoires/Banniere Accesoires WEB.jpg",                  label: "Web",    caption: "Accessoires" },
+      { src: "assets/travaux/Evox Performance/Accessoires/Banniere Accessoires Mobile.jpg",              label: "Mobile", caption: "Accessoires" }
     ]
   }
 

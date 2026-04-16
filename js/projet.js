@@ -22,15 +22,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Gallery ── */
   const container = document.getElementById('projet-images');
-  container.innerHTML = project.gallery.map((src, i) => `
-    <div class="projet-img-wrap${i === 0 ? ' projet-img-hero' : ''}">
-      <img
-        src="${src}"
-        alt="${project.title} — visuel ${i + 1}"
-        loading="${i < 2 ? 'eager' : 'lazy'}"
-      />
-    </div>
-  `).join('');
+
+  // Detect if gallery uses { src, label, caption } objects or plain strings
+  const isStructured = project.gallery.length > 0 && typeof project.gallery[0] === 'object';
+
+  if (isStructured) {
+    // Group pairs: each Web + its Mobile version together
+    const pairs = [];
+    for (let i = 0; i < project.gallery.length; i += 2) {
+      pairs.push(project.gallery.slice(i, i + 2));
+    }
+
+    container.innerHTML = pairs.map((pair, pairIdx) => {
+      const caption = pair[0].caption || '';
+      const items = pair.map((item, i) => {
+        const isMobile = item.label === 'Mobile';
+        const isFirst  = pairIdx === 0 && i === 0;
+        return `
+          <div class="projet-img-wrap${isFirst ? ' projet-img-hero' : ''}${isMobile ? ' projet-img-mobile' : ''}">
+            <span class="projet-format-badge projet-format-badge--${item.label.toLowerCase()}">${item.label}</span>
+            <img
+              src="${item.src}"
+              alt="${project.title} — ${item.caption} ${item.label}"
+              loading="${isFirst ? 'eager' : 'lazy'}"
+            />
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="projet-pair">
+          ${caption ? `<p class="projet-pair-caption">${caption}</p>` : ''}
+          <div class="projet-pair-grid">${items}</div>
+        </div>`;
+    }).join('');
+
+  } else {
+    // Legacy: plain string gallery
+    container.innerHTML = project.gallery.map((src, i) => `
+      <div class="projet-img-wrap${i === 0 ? ' projet-img-hero' : ''}">
+        <img
+          src="${src}"
+          alt="${project.title} — visuel ${i + 1}"
+          loading="${i < 2 ? 'eager' : 'lazy'}"
+        />
+      </div>
+    `).join('');
+  }
 
   /* ── Entrance animation ── */
   gsap.from('.projet-header', { opacity: 0, y: 30, duration: 0.7, delay: 0.15, ease: 'power3.out' });
