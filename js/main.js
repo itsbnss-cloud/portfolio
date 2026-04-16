@@ -672,14 +672,14 @@ function initForm() {
    INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  initLoader();
-  initCursor();
-  initNav();
-  initScrollReveal();
-  initScrollAnimations();
-  initCounters();
-  initMagnetic();
-  initProjects();
-  initLightbox();
-  initForm();
+  try { initLoader(); }        catch(e) { console.error('initLoader:', e); }
+  try { initCursor(); }        catch(e) { console.error('initCursor:', e); }
+  try { initNav(); }           catch(e) { console.error('initNav:', e); }
+  try { initScrollReveal(); }  catch(e) { console.error('initScrollReveal:', e); }
+  try { initScrollAnimations(); } catch(e) { console.error('initScrollAnimations:', e); }
+  try { initCounters(); }      catch(e) { console.error('initCounters:', e); }
+  try { initMagnetic(); }      catch(e) { console.error('initMagnetic:', e); }
+  try { initProjects(); }      catch(e) { console.error('initProjects:', e); }
+  try { initLightbox(); }      catch(e) { console.error('initLightbox:', e); }
+  try { initForm(); }          catch(e) { console.error('initForm:', e); }
 });
