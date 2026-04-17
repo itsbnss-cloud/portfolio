@@ -348,36 +348,20 @@ body.cursor-dragging #cursor-ring {
 /* Mobile menu */
 #mobile-menu {
   position: fixed;
-  top: 0; right: 0; bottom: 0;
-  width: min(80vw, 320px);
+  inset: 0;
   z-index: 1004;
-  background: #0d0d0d;
-  border-left: 1px solid rgba(245,166,35,0.08);
+  background: #080808;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: calc(60px + env(safe-area-inset-top, 0px));
-  /* transform handled entirely by GSAP */
-  pointer-events: none;
-  box-shadow: -12px 0 48px rgba(0,0,0,0.55);
-}
-
-#mobile-menu.open {
-  pointer-events: all;
-}
-
-/* Backdrop behind the menu panel */
-#mobile-menu-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1003;
-  background: rgba(0,0,0,0.55);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
 }
-#mobile-menu-backdrop.open {
+
+#mobile-menu.open {
   opacity: 1;
   pointer-events: all;
 }
@@ -397,6 +381,7 @@ body.cursor-dragging #cursor-ring {
   font-weight: 900;
   letter-spacing: 0;
   color: #f0e6cc !important;
+  opacity: 1 !important;
   display: block;
   text-align: center;
   transition: color 0.3s;
