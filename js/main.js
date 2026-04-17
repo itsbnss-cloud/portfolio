@@ -774,4 +774,11 @@ document.addEventListener('DOMContentLoaded', () => {
   try { initProjects(); }         catch(e) { console.error('initProjects:', e); }
   try { initLightbox(); }         catch(e) { console.error('initLightbox:', e); }
   try { initForm(); }             catch(e) { console.error('initForm:', e); }
+
+  // If navigating from another page with a hash, scroll to that section
+  const navType = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0] || {}).type;
+  if (navType === 'navigate' && window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) setTimeout(() => easedScrollTo(target), 100);
+  }
 });
