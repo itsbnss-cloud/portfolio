@@ -17,21 +17,14 @@ let savedScrollY = 0;
 
 function lockScroll() {
   savedScrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top      = `-${savedScrollY}px`;
-  document.body.style.width    = '100%';
+  document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
 }
 
 function unlockScroll() {
-  document.body.style.position = '';
-  document.body.style.top      = '';
-  document.body.style.width    = '';
+  document.documentElement.style.overflow = '';
   document.body.style.overflow = '';
-  // Force instant jump — override css scroll-behavior: smooth temporarily
-  document.documentElement.style.scrollBehavior = 'auto';
-  window.scrollTo(0, savedScrollY);
-  document.documentElement.style.scrollBehavior = '';
+  // window.scrollY is unchanged — no restore needed
 }
 
 /* ============================================================
@@ -213,12 +206,8 @@ function initNav() {
 
       if (target) {
         e.preventDefault();
-        // Compute position NOW while body is still fixed (window.scrollY = 0)
-        // savedScrollY holds the real scroll offset → use it as base
-        const navH    = nav.offsetHeight || 70;
-        const targetY = Math.max(0, savedScrollY + target.getBoundingClientRect().top - navH);
-        unlockScroll(); // restores body to normal + jumps to savedScrollY
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
+        unlockScroll();
+        easedScrollTo(target);
       } else {
         unlockScroll();
       }

@@ -138,20 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
-  let savedScrollY = 0;
   function lockScroll() {
-    savedScrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top      = `-${savedScrollY}px`;
-    document.body.style.width    = '100%';
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
   function unlockScroll() {
-    document.body.style.position = '';
-    document.body.style.top      = '';
-    document.body.style.width    = '';
+    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    window.scrollTo(0, savedScrollY);
   }
 
   burger.addEventListener('click', () => {
