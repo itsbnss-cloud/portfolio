@@ -28,7 +28,10 @@ function unlockScroll() {
   document.body.style.top      = '';
   document.body.style.width    = '';
   document.body.style.overflow = '';
+  // Force instant jump — override css scroll-behavior: smooth temporarily
+  document.documentElement.style.scrollBehavior = 'auto';
   window.scrollTo(0, savedScrollY);
+  document.documentElement.style.scrollBehavior = '';
 }
 
 /* ============================================================
