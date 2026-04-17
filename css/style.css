@@ -358,15 +358,12 @@ body.cursor-dragging #cursor-ring {
   align-items: center;
   justify-content: center;
   padding-top: calc(60px + env(safe-area-inset-top, 0px));
-  transform: translateX(100%);
-  opacity: 0;
+  /* transform handled entirely by GSAP */
   pointer-events: none;
-  will-change: transform;
   box-shadow: -12px 0 48px rgba(0,0,0,0.55);
 }
 
 #mobile-menu.open {
-  opacity: 1;
   pointer-events: all;
 }
 
@@ -383,12 +380,6 @@ body.cursor-dragging #cursor-ring {
 #mobile-menu-backdrop.open {
   opacity: 1;
   pointer-events: all;
-}
-
-/* Staggered link entrance */
-#mobile-menu ul a {
-  opacity: 0;
-  transform: translateX(24px);
 }
 
 #mobile-menu ul {

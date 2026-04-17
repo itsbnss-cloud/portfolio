@@ -185,6 +185,12 @@ function initNav() {
   const sections  = document.querySelectorAll('section[id]');
   const menuW     = () => menu ? menu.offsetWidth : 300;
 
+  // Set initial off-screen state (GSAP owns all transforms on menu)
+  if (menu) {
+    gsap.set(menu, { x: menuW() });
+    gsap.set(menuLinks, { x: 24, opacity: 0 });
+  }
+
   // Scroll class
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
@@ -214,10 +220,7 @@ function initNav() {
     if (backdrop) backdrop.classList.add('open');
     lockScroll();
 
-    gsap.fromTo(menu,
-      { x: menuW() },
-      { x: 0, duration: 0.42, ease: 'power3.out', clearProps: 'x' }
-    );
+    gsap.to(menu, { x: 0, duration: 0.42, ease: 'power3.out' });
     gsap.fromTo(menuLinks,
       { x: 24, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.32, stagger: 0.07, ease: 'power2.out', delay: 0.18 }
@@ -235,16 +238,11 @@ function initNav() {
     if (instantly) {
       gsap.set(menu, { x: menuW() });
       menu.classList.remove('open');
-      gsap.set(menu, { clearProps: 'x' });
       unlockScroll();
     } else {
       gsap.to(menu, {
         x: menuW(), duration: 0.32, ease: 'power3.in',
-        onComplete: () => {
-          menu.classList.remove('open');
-          gsap.set(menu, { clearProps: 'x' });
-          unlockScroll();
-        }
+        onComplete: () => { menu.classList.remove('open'); unlockScroll(); }
       });
     }
   }
@@ -331,7 +329,7 @@ function initNav() {
         nav.classList.add('menu-open');
         if (backdrop) backdrop.classList.add('open');
         lockScroll();
-        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out', clearProps: 'x' });
+        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out' });
         if (backdrop) gsap.to(backdrop, { opacity: 0.55, duration: 0.25 });
         gsap.fromTo(menuLinks,
           { x: 24, opacity: 0 },
@@ -341,7 +339,7 @@ function initNav() {
         // Snap back
         gsap.to(menu, {
           x: menuW(), duration: 0.22, ease: 'power2.in',
-          onComplete: () => { menu.classList.remove('open'); gsap.set(menu, { clearProps: 'x' }); }
+          onComplete: () => { menu.classList.remove('open'); }
         });
         if (backdrop) gsap.to(backdrop, { opacity: 0, duration: 0.22 });
       }
@@ -349,7 +347,7 @@ function initNav() {
       if (commit && dx > 0) {
         closeMenu();
       } else {
-        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out', clearProps: 'x' });
+        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out' });
         if (backdrop) gsap.to(backdrop, { opacity: 0.55, duration: 0.25 });
       }
     }
