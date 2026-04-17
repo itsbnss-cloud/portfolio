@@ -210,8 +210,12 @@ function initNav() {
 
       if (target) {
         e.preventDefault();
-        unlockScroll();
-        requestAnimationFrame(() => easedScrollTo(target));
+        // Compute position NOW while body is still fixed (window.scrollY = 0)
+        // savedScrollY holds the real scroll offset → use it as base
+        const navH    = nav.offsetHeight || 70;
+        const targetY = Math.max(0, savedScrollY + target.getBoundingClientRect().top - navH);
+        unlockScroll(); // restores body to normal + jumps to savedScrollY
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
       } else {
         unlockScroll();
       }
