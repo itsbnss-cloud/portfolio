@@ -153,14 +153,37 @@ function initCursor() {
 }
 
 /* ============================================================
+   SMOOTH SCROLL HELPER — rAF-based, reliable on iOS
+   ============================================================ */
+function easedScrollTo(targetEl, duration = 750) {
+  const navEl   = document.getElementById('nav');
+  const navH    = navEl ? navEl.offsetHeight : 70;
+  const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
+  const startY  = window.scrollY;
+  const dist    = targetY - startY;
+  if (Math.abs(dist) < 2) return;
+  const startT  = performance.now();
+  function step(now) {
+    const p = Math.min((now - startT) / duration, 1);
+    const e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
+    window.scrollTo(0, startY + dist * e);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
    NAVBAR
    ============================================================ */
 function initNav() {
-  const nav     = document.getElementById('nav');
-  const burger  = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const navLinks = document.querySelectorAll('.nav-link:not(.nav-cta)');
-  const sections = document.querySelectorAll('section[id]');
+  const nav      = document.getElementById('nav');
+  const burger   = document.getElementById('burger');
+  const menu     = document.getElementById('mobile-menu');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+  const menuLinks = menu ? [...menu.querySelectorAll('a')] : [];
+  const navLinks  = document.querySelectorAll('.nav-link:not(.nav-cta)');
+  const sections  = document.querySelectorAll('section[id]');
+  const menuW     = () => menu ? menu.offsetWidth : 300;
 
   // Scroll class
   window.addEventListener('scroll', () => {
@@ -168,7 +191,7 @@ function initNav() {
   }, { passive: true });
 
   // Active section highlight
-  const observer = new IntersectionObserver(entries => {
+  const sectionObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         navLinks.forEach(l => l.classList.remove('active'));
@@ -177,59 +200,162 @@ function initNav() {
       }
     });
   }, { threshold: 0.4 });
+  sections.forEach(s => sectionObserver.observe(s));
 
-  sections.forEach(s => observer.observe(s));
+  /* ── Open / close helpers ── */
+  let menuOpen = false;
 
-  // Smooth scroll helper — rAF-based, works on iOS
-  function easedScrollTo(targetEl, duration = 750) {
-    const navH    = nav.offsetHeight || 70;
-    const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
-    const startY  = window.scrollY;
-    const dist    = targetY - startY;
-    if (Math.abs(dist) < 2) return;
-    const startT  = performance.now();
-    function step(now) {
-      const p = Math.min((now - startT) / duration, 1);
-      // ease-in-out cubic
-      const e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
-      window.scrollTo(0, startY + dist * e);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+  function openMenu() {
+    if (menuOpen || !menu) return;
+    menuOpen = true;
+    menu.classList.add('open');
+    burger.classList.add('open');
+    nav.classList.add('menu-open');
+    if (backdrop) backdrop.classList.add('open');
+    lockScroll();
+
+    gsap.fromTo(menu,
+      { x: menuW() },
+      { x: 0, duration: 0.42, ease: 'power3.out', clearProps: 'x' }
+    );
+    gsap.fromTo(menuLinks,
+      { x: 24, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.32, stagger: 0.07, ease: 'power2.out', delay: 0.18 }
+    );
   }
 
-  // Burger
-  burger.addEventListener('click', () => {
-    burger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-    const isOpen = mobileMenu.classList.contains('open');
-    nav.classList.toggle('menu-open', isOpen);
-    isOpen ? lockScroll() : unlockScroll();
-  });
+  function closeMenu(instantly = false) {
+    if (!menuOpen || !menu) return;
+    menuOpen = false;
+    burger.classList.remove('open');
+    nav.classList.remove('menu-open');
+    if (backdrop) backdrop.classList.remove('open');
+    gsap.set(menuLinks, { x: 24, opacity: 0 });
 
-  // Close mobile menu on link click → unlock first, then smooth scroll
-  mobileMenu.querySelectorAll('a').forEach(link => {
+    if (instantly) {
+      gsap.set(menu, { x: menuW() });
+      menu.classList.remove('open');
+      gsap.set(menu, { clearProps: 'x' });
+      unlockScroll();
+    } else {
+      gsap.to(menu, {
+        x: menuW(), duration: 0.32, ease: 'power3.in',
+        onComplete: () => {
+          menu.classList.remove('open');
+          gsap.set(menu, { clearProps: 'x' });
+          unlockScroll();
+        }
+      });
+    }
+  }
+
+  /* ── Burger button ── */
+  burger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+
+  /* ── Backdrop tap ── */
+  if (backdrop) backdrop.addEventListener('click', () => closeMenu());
+
+  /* ── Menu link tap ── */
+  menuLinks.forEach(link => {
     link.addEventListener('click', e => {
       const href   = link.getAttribute('href') || '';
       const hash   = href.includes('#') ? '#' + href.split('#')[1] : null;
       const target = hash ? document.querySelector(hash) : null;
 
-      // Close menu
-      burger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      nav.classList.remove('menu-open');
-
       if (target) {
         e.preventDefault();
-        unlockScroll();                        // restore scroll position instantly
-        requestAnimationFrame(() => easedScrollTo(target)); // then glide to section
+        closeMenu();
+        setTimeout(() => easedScrollTo(target), 370);
       } else {
-        unlockScroll();
+        closeMenu(true);
       }
     });
   });
 
-  // Smooth scroll for all other anchor links (non-menu)
+  /* ── Swipe gesture ──
+     • Swipe left from right edge → open
+     • Swipe right anywhere when menu open → close           */
+  const EDGE_ZONE  = 44;   // px from right edge to trigger drag-open
+  const THRESHOLD  = 55;   // px drag distance to commit
+  const VEL_T      = 0.35; // px/ms velocity to commit early
+
+  let swActive = false, swStartX = 0, swStartY = 0, swTime = 0, swDir = null;
+
+  document.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    swStartX = t.clientX; swStartY = t.clientY;
+    swTime = Date.now(); swActive = false; swDir = null;
+
+    if (!menuOpen && t.clientX > window.innerWidth - EDGE_ZONE) {
+      swDir = 'open'; swActive = true;
+      // Prepare menu visually without triggering open state
+      menu.classList.add('open');
+      menu.style.pointerEvents = 'none';
+      gsap.set(menu, { x: menuW() });
+      gsap.set(menuLinks, { x: 24, opacity: 0 });
+    } else if (menuOpen) {
+      swDir = 'close'; swActive = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!swActive) return;
+    const t = e.touches[0];
+    const dx = t.clientX - swStartX;
+    const dy = t.clientY - swStartY;
+    if (Math.abs(dy) > Math.abs(dx) + 12) { swActive = false; return; }
+
+    if (swDir === 'open') {
+      const x = Math.max(0, menuW() + dx);
+      gsap.set(menu, { x });
+      if (backdrop) gsap.set(backdrop, { opacity: Math.min(0.55, (menuW() - x) / menuW() * 0.55) });
+    } else if (swDir === 'close' && dx > 0) {
+      gsap.set(menu, { x: Math.min(menuW(), dx) });
+      if (backdrop) gsap.set(backdrop, { opacity: Math.max(0, 0.55 - dx / menuW() * 0.55) });
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (!swActive) return;
+    swActive = false;
+    const dx  = e.changedTouches[0].clientX - swStartX;
+    const vel = Math.abs(dx) / Math.max(1, Date.now() - swTime);
+    const commit = Math.abs(dx) > THRESHOLD || vel > VEL_T;
+
+    if (swDir === 'open') {
+      menu.style.pointerEvents = '';
+      if (commit && dx < 0) {
+        // Snap open
+        menuOpen = true;
+        burger.classList.add('open');
+        nav.classList.add('menu-open');
+        if (backdrop) backdrop.classList.add('open');
+        lockScroll();
+        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out', clearProps: 'x' });
+        if (backdrop) gsap.to(backdrop, { opacity: 0.55, duration: 0.25 });
+        gsap.fromTo(menuLinks,
+          { x: 24, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.28, stagger: 0.06, ease: 'power2.out', delay: 0.1 }
+        );
+      } else {
+        // Snap back
+        gsap.to(menu, {
+          x: menuW(), duration: 0.22, ease: 'power2.in',
+          onComplete: () => { menu.classList.remove('open'); gsap.set(menu, { clearProps: 'x' }); }
+        });
+        if (backdrop) gsap.to(backdrop, { opacity: 0, duration: 0.22 });
+      }
+    } else if (swDir === 'close') {
+      if (commit && dx > 0) {
+        closeMenu();
+      } else {
+        gsap.to(menu, { x: 0, duration: 0.28, ease: 'power2.out', clearProps: 'x' });
+        if (backdrop) gsap.to(backdrop, { opacity: 0.55, duration: 0.25 });
+      }
+    }
+  }, { passive: true });
+
+  /* ── Smooth scroll for desktop anchor links ── */
   document.querySelectorAll('a[href^="#"]:not(#mobile-menu a)').forEach(anchor => {
     anchor.addEventListener('click', e => {
       const target = document.querySelector(anchor.getAttribute('href'));
