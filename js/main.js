@@ -175,6 +175,24 @@ function initNav() {
 
   sections.forEach(s => observer.observe(s));
 
+  // Smooth scroll helper — rAF-based, works on iOS
+  function easedScrollTo(targetEl, duration = 750) {
+    const navH    = nav.offsetHeight || 70;
+    const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
+    const startY  = window.scrollY;
+    const dist    = targetY - startY;
+    if (Math.abs(dist) < 2) return;
+    const startT  = performance.now();
+    function step(now) {
+      const p = Math.min((now - startT) / duration, 1);
+      // ease-in-out cubic
+      const e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
+      window.scrollTo(0, startY + dist * e);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
   // Burger
   burger.addEventListener('click', () => {
     burger.classList.toggle('open');
@@ -184,23 +202,35 @@ function initNav() {
     isOpen ? lockScroll() : unlockScroll();
   });
 
-  // Close mobile menu on link click
+  // Close mobile menu on link click → unlock first, then smooth scroll
   mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', e => {
+      const href   = link.getAttribute('href') || '';
+      const hash   = href.includes('#') ? '#' + href.split('#')[1] : null;
+      const target = hash ? document.querySelector(hash) : null;
+
+      // Close menu
       burger.classList.remove('open');
       mobileMenu.classList.remove('open');
       nav.classList.remove('menu-open');
-      unlockScroll();
+
+      if (target) {
+        e.preventDefault();
+        unlockScroll();                        // restore scroll position instantly
+        requestAnimationFrame(() => easedScrollTo(target)); // then glide to section
+      } else {
+        unlockScroll();
+      }
     });
   });
 
-  // Smooth scroll — 50ms delay so iOS scroll unlock settles before navigation
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Smooth scroll for all other anchor links (non-menu)
+  document.querySelectorAll('a[href^="#"]:not(#mobile-menu a)').forEach(anchor => {
     anchor.addEventListener('click', e => {
-      e.preventDefault();
       const target = document.querySelector(anchor.getAttribute('href'));
       if (!target) return;
-      setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      e.preventDefault();
+      easedScrollTo(target);
     });
   });
 }
