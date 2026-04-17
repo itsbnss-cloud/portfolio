@@ -153,23 +153,12 @@ function initCursor() {
 }
 
 /* ============================================================
-   SMOOTH SCROLL HELPER — rAF-based, reliable on iOS
+   SMOOTH SCROLL HELPER
    ============================================================ */
-function easedScrollTo(targetEl, duration = 750) {
-  const navEl   = document.getElementById('nav');
-  const navH    = navEl ? navEl.offsetHeight : 70;
+function easedScrollTo(targetEl) {
+  const navH    = document.getElementById('nav')?.offsetHeight || 70;
   const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
-  const startY  = window.scrollY;
-  const dist    = targetY - startY;
-  if (Math.abs(dist) < 2) return;
-  const startT  = performance.now();
-  function step(now) {
-    const p = Math.min((now - startT) / duration, 1);
-    const e = p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
-    window.scrollTo(0, startY + dist * e);
-    if (p < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+  window.scrollTo({ top: targetY, behavior: 'smooth' });
 }
 
 /* ============================================================
