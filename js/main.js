@@ -5,6 +5,10 @@
 
 try { gsap.registerPlugin(ScrollTrigger); } catch(e) { console.warn('GSAP ScrollTrigger not loaded:', e); }
 
+// Always start at top on page load / refresh
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
 /* ============================================================
    iOS-SAFE SCROLL LOCK  (used by both mobile menu & lightbox)
    ============================================================ */
