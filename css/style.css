@@ -1014,6 +1014,15 @@ body.cursor-dragging #cursor-ring {
   height: 22px;
   object-fit: contain;
 }
+.service-icon--hand {
+  overflow: hidden;
+}
+.service-icon--hand img {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  object-position: center 20%;
+}
 .service-card:hover .service-icon {
   background: var(--y);
   transform: rotate(8deg);
