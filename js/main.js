@@ -229,19 +229,21 @@ function initNav() {
    SCROLL REVEAL
    ============================================================ */
 function initScrollReveal() {
-  const revealEls = document.querySelectorAll('[data-reveal]');
+  // CSS scroll-driven handles this natively — skip JS
+  if (CSS.supports('animation-timeline: view()')) return;
 
+  const revealEls = document.querySelectorAll('[data-reveal]');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const delay = entry.target.dataset.delay || 0;
-        setTimeout(() => {
-          entry.target.classList.add('revealed');
-        }, parseInt(delay));
-        observer.unobserve(entry.target);
+        setTimeout(() => entry.target.classList.add('revealed'), parseInt(delay));
+      } else {
+        // Bidirectional: animate back out when leaving viewport
+        entry.target.classList.remove('revealed');
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.12 });
 
   revealEls.forEach(el => observer.observe(el));
 }
@@ -250,32 +252,28 @@ function initScrollReveal() {
    GSAP SCROLL ANIMATIONS
    ============================================================ */
 function initScrollAnimations() {
-  // Services stagger — opacity only, no Y offset to keep grid alignment
-  gsap.from('.service-card', {
-    scrollTrigger: {
-      trigger: '.services-grid',
-      start: 'top 82%',
-    },
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.12,
-    ease: 'power2.out'
-  });
+  const useScrollDriven = CSS.supports('animation-timeline: view()');
 
-  // Contact form
-  gsap.from('.contact-form .form-group', {
-    scrollTrigger: {
-      trigger: '.contact-form',
-      start: 'top 80%',
-    },
-    opacity: 0,
-    y: 30,
-    duration: 0.6,
-    stagger: 0.1,
-    ease: 'power2.out'
-  });
+  // GSAP stagger animations — only as fallback when CSS scroll-driven unavailable
+  if (!useScrollDriven) {
+    gsap.from('.service-card', {
+      scrollTrigger: { trigger: '.services-grid', start: 'top 82%' },
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power2.out'
+    });
+    gsap.from('.contact-form .form-group', {
+      scrollTrigger: { trigger: '.contact-form', start: 'top 80%' },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'power2.out'
+    });
+  }
 
-  // Hero parallax — desktop only (avoid jank on mobile)
+  // Hero parallax on character — desktop only
   if (window.innerWidth >= 768) {
     gsap.to('.hero-character', {
       scrollTrigger: {
