@@ -32,7 +32,7 @@ a img, button img { pointer-events: auto; }
 
 @font-face {
   font-family: "Moga";
-  src: url("../moga-font/moga.otf") format("opentype");
+  src: url("../assets/fonts/moga.otf") format("opentype");
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
