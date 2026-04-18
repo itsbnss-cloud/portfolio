@@ -846,17 +846,19 @@ body.cursor-dragging #cursor-ring {
   }
 }
 
-/* Hero content fades out as user scrolls down */
-@supports (animation-timeline: scroll()) {
-  .hero-left {
-    animation: hero-scroll-out linear both;
-    animation-timeline: scroll(root);
-    animation-range: 8vh 45vh;
-  }
-  .hero-right {
-    animation: hero-scroll-out linear both;
-    animation-timeline: scroll(root);
-    animation-range: 4vh 38vh;
+/* Hero content fades out as user scrolls down — desktop only */
+@media (min-width: 768px) {
+  @supports (animation-timeline: scroll()) {
+    .hero-left {
+      animation: hero-scroll-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 8vh 45vh;
+    }
+    .hero-right {
+      animation: hero-scroll-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 4vh 38vh;
+    }
   }
 }
 

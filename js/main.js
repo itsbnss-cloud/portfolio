@@ -273,8 +273,8 @@ function initScrollAnimations() {
     });
   }
 
-  // Hero parallax on character — desktop only
-  if (window.innerWidth >= 768) {
+  // Hero parallax on character — desktop only (mobile: character is top, avoid overflow)
+  if (window.innerWidth >= 900) {
     gsap.to('.hero-character', {
       scrollTrigger: {
         trigger: '#hero',
