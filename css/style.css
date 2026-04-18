@@ -1013,8 +1013,6 @@ body.cursor-dragging #cursor-ring {
   width: 22px;
   height: 22px;
   object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(68%) sepia(86%) saturate(401%)
-    hue-rotate(357deg) brightness(102%) contrast(94%);
 }
 .service-card:hover .service-icon {
   background: var(--y);
@@ -1022,9 +1020,6 @@ body.cursor-dragging #cursor-ring {
 }
 .service-card:hover .service-icon svg {
   color: #000;
-}
-.service-card:hover .service-icon img {
-  filter: brightness(0);
 }
 
 .service-card h3 {
