@@ -257,6 +257,11 @@ body.cursor-dragging #cursor-ring {
   display: flex;
   align-items: center;
   gap: 10px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.nav-brand * {
+  pointer-events: auto;
 }
 
 .nav-jd {
