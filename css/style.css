@@ -841,7 +841,7 @@ body.cursor-dragging #cursor-ring {
   }
   .project-card {
     animation: sd-up linear both;
-    animation-timeline: view();
+    animation-timeline: view(block);
     animation-range: entry 0% exit 100%;
   }
 }

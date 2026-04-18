@@ -440,7 +440,9 @@ function renderProjects(filter = 'all') {
   const cards = [...grid.querySelectorAll('.project-card')];
   cards.forEach(attachCardEvents);
 
-  try { gsap.from(cards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity' }); } catch(e) {}
+  if (!CSS.supports('animation-timeline: view()')) {
+    try { gsap.from(cards, { opacity: 0, y: 16, duration: 0.5, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity' }); } catch(e) {}
+  }
 }
 
 function initProjects() {
