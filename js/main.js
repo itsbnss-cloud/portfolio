@@ -770,4 +770,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = document.querySelector(window.location.hash);
     if (target) setTimeout(() => easedScrollTo(target), 100);
   }
+
+  // IMAGE PROTECTION — disable right-click, drag, longpress and Ctrl+S
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('contextmenu', e => e.preventDefault());
+    img.addEventListener('dragstart',   e => e.preventDefault());
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') e.preventDefault();
+  });
 });
