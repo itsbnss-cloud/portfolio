@@ -5,6 +5,33 @@
 
 try { gsap.registerPlugin(ScrollTrigger); } catch(e) { console.warn('GSAP ScrollTrigger not loaded:', e); }
 
+/* ── THEME TOGGLE ─────────────────────────────────────────── */
+(function initTheme() {
+  const saved = localStorage.getItem('jd-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('jd-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('jd-theme', 'light');
+    }
+    btn.animate(
+      [{ transform: 'scale(1)' }, { transform: 'scale(0.8)' }, { transform: 'scale(1)' }],
+      { duration: 300, easing: 'cubic-bezier(.22,.68,0,1.2)' }
+    );
+  });
+});
+
 // Always start at top — suppress hash scroll on load/refresh
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);

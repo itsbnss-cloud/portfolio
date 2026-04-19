@@ -30,6 +30,55 @@ a img, button img { pointer-events: auto; }
   --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Light theme ─────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg: #faf7f2;
+  --s1: #f0ebe1;
+  --s2: #e5ddd0;
+  --s3: #d8cfbe;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-y: rgba(245, 166, 35, 0.4);
+  --text: #110e0a;
+  --muted: #888;
+  --muted2: #555;
+}
+[data-theme="light"] html,
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+
+/* Text hardcodé blanc → #110e0a en mode clair */
+[data-theme="light"] .section-title      { color: #110e0a; }
+[data-theme="light"] .service-card h3    { color: #110e0a; }
+[data-theme="light"] .service-card p     { color: #110e0a; }
+[data-theme="light"] .project-title      { color: #110e0a; }
+[data-theme="light"] .projet-title       { color: #110e0a; }
+[data-theme="light"] .format-card-caption   { color: #110e0a; }
+[data-theme="light"] .format-detail-caption { color: #110e0a; }
+[data-theme="light"] .proj-nav-name      { color: #110e0a; }
+[data-theme="light"] .format-detail-close { color: #110e0a; border-color: rgba(0,0,0,0.15); background: rgba(0,0,0,0.06); }
+[data-theme="light"] .hero-tag           { color: #110e0a; }
+[data-theme="light"] .hero-sub           { color: #110e0a; }
+[data-theme="light"] .section-tag        { color: var(--y); }
+[data-theme="light"] .about-text         { color: #110e0a; }
+[data-theme="light"] .contact-text       { color: #110e0a; }
+[data-theme="light"] .stat-label         { color: #110e0a; }
+[data-theme="light"] .tool-tag           { color: #110e0a; border-color: rgba(0,0,0,0.15); background: var(--s2); }
+
+[data-theme="light"] #mobile-menu    { background: var(--bg); }
+[data-theme="light"] #nav.scrolled   { background: rgba(250, 247, 242, 0.95); }
+[data-theme="light"] .nav-studio     { border-color: #ccc; }
+[data-theme="light"] .loader-bar     { background: #ddd; }
+[data-theme="light"] .hero-bg-text   { color: rgba(0,0,0,0.04); }
+[data-theme="light"] .orb1           { background: radial-gradient(circle, rgba(245,166,35,0.18), transparent 70%); }
+[data-theme="light"] .service-card   { background: var(--s1); border-color: var(--border); }
+[data-theme="light"] .service-number { color: var(--muted); }
+[data-theme="light"] .filter-btn     { background: var(--s2); color: var(--text); }
+[data-theme="light"] .filter-btn.active { background: var(--y); color: #000; }
+[data-theme="light"] .projects-nav-btn  { background: var(--s2); color: var(--text); }
+[data-theme="light"] .contact-wrap   { background: var(--s1); }
+[data-theme="light"] .form-group input,
+[data-theme="light"] .form-group textarea { background: var(--bg); color: var(--text); border-color: var(--border); }
+[data-theme="light"] footer          { background: var(--s1); border-color: var(--border); }
+
 @font-face {
   font-family: "Moga";
   src: url("../assets/fonts/moga.otf") format("opentype");
@@ -346,6 +395,25 @@ body.cursor-dragging #cursor-ring {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px var(--y-glow);
 }
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted2);
+  transition: color 0.3s, border-color 0.3s, transform 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--y); border-color: var(--y); }
+.theme-toggle .icon-moon { display: none; }
+[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
+[data-theme="light"] .theme-toggle .icon-moon { display: block; }
 
 .nav-burger {
   display: none;
