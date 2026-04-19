@@ -179,24 +179,9 @@ function initCursor() {
    SMOOTH SCROLL HELPER
    ============================================================ */
 function easedScrollTo(targetEl) {
-  const navH     = document.getElementById('nav')?.offsetHeight || 70;
-  const targetY  = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
-  const startY   = window.scrollY;
-  const dist     = targetY - startY;
-  const duration = window.innerWidth < 900 ? 1000 : 700; // slower on mobile
-  const startTime = performance.now();
-
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  }
-
-  function step(now) {
-    const progress = Math.min((now - startTime) / duration, 1);
-    window.scrollTo(0, startY + dist * easeInOutCubic(progress));
-    if (progress < 1) requestAnimationFrame(step);
-  }
-
-  requestAnimationFrame(step);
+  const navH    = document.getElementById('nav')?.offsetHeight || 70;
+  const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navH);
+  window.scrollTo({ top: targetY, behavior: 'smooth' });
 }
 
 /* ============================================================
@@ -281,7 +266,6 @@ function initScrollReveal() {
         const delay = entry.target.dataset.delay || 0;
         setTimeout(() => entry.target.classList.add('revealed'), parseInt(delay));
       } else {
-        // Bidirectional: animate back out when leaving viewport
         entry.target.classList.remove('revealed');
       }
     });
