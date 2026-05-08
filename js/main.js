@@ -734,42 +734,28 @@ function initLightbox() {
 function initForm() {
   const form = document.getElementById('contact-form');
 
-  form.addEventListener('submit', async e => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     const btn      = form.querySelector('button[type="submit"]');
     const btnLabel = btn.querySelector('span');
 
-    btnLabel.textContent = 'Envoi en cours…';
-    btn.disabled = true;
+    const name    = (form.querySelector('[name="name"]').value    || '').trim();
+    const email   = (form.querySelector('[name="email"]').value   || '').trim();
+    const subject = (form.querySelector('[name="subject"]').value || '').trim();
+    const message = (form.querySelector('[name="message"]').value || '').trim();
 
-    try {
-      const res = await fetch('https://formspree.io/f/mvzdkwkd', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(form)
-      });
+    const text = `Bonjour Ibrahim ! 👋\n\nNom : ${name}\nEmail : ${email}\nSujet : ${subject}\n\nMessage :\n${message}`;
+    const url  = `https://wa.me/330755329577?text=${encodeURIComponent(text)}`;
 
-      if (res.ok) {
-        btnLabel.textContent = 'Message envoyé ✓';
-        gsap.to(btn, { background: '#22c55e', duration: 0.3 });
-        form.reset();
-        setTimeout(() => {
-          btnLabel.textContent = 'Envoyer le message';
-          gsap.to(btn, { background: 'var(--y)', duration: 0.3 });
-          btn.disabled = false;
-        }, 4000);
-      } else {
-        throw new Error();
-      }
-    } catch {
-      btnLabel.textContent = 'Erreur — réessayez';
-      gsap.to(btn, { background: '#ef4444', duration: 0.3 });
-      setTimeout(() => {
-        btnLabel.textContent = 'Envoyer le message';
-        gsap.to(btn, { background: 'var(--y)', duration: 0.3 });
-        btn.disabled = false;
-      }, 3000);
-    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+
+    btnLabel.textContent = 'Ouverture WhatsApp ✓';
+    gsap.to(btn, { background: '#22c55e', duration: 0.3 });
+    form.reset();
+    setTimeout(() => {
+      btnLabel.textContent = 'Envoyer via WhatsApp';
+      gsap.to(btn, { background: 'var(--y)', duration: 0.3 });
+    }, 3500);
   });
 }
 
