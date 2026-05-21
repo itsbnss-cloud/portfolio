@@ -93,54 +93,68 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `).join('');
 
-    // ── Lightbox avec swipe élastique ──
+    // ── Lightbox carousel (blur + fondu) ──
     const lb        = document.getElementById('lb');
-    const lbImg     = document.getElementById('lb-img');
+    const lbTrack   = document.getElementById('lb-track');
+    const lbSlides  = Array.from(lbTrack.querySelectorAll('.lb-slide'));
     const lbPrev    = document.getElementById('lb-prev');
     const lbNext    = document.getElementById('lb-next');
     const lbCounter = document.getElementById('lb-counter');
     const nav       = document.getElementById('nav');
     const srcs      = project.gallery;
-    let lbIdx       = 0;
-    let dragging    = false;
-    let dragStart   = null;
+    let lbIdx  = 0;
+    let lbBusy = false;
+    let dragStart = null;
+    let dragging  = false;
 
-    // Slide vers un nouvel index (via boutons/clavier)
+    const slide  = pos => lbSlides.find(s => s.dataset.pos === String(pos));
+    const W      = ()  => lb.offsetWidth;
+
+    // Met à jour le contenu des 3 slots sans animation
+    const syncContent = () => {
+      slide(-1).querySelector('img').src = srcs[(lbIdx - 1 + srcs.length) % srcs.length];
+      slide( 0).querySelector('img').src = srcs[lbIdx];
+      slide( 1).querySelector('img').src = srcs[(lbIdx + 1) % srcs.length];
+      lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
+    };
+
+    // Navigation (boutons, clavier, trackpad)
     const lbGo = (newIdx, dir) => {
-      const w = lb.offsetWidth;
-      lbImg.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
-      lbImg.style.transform  = `translateX(${dir * -w * 0.55}px) scale(0.88)`;
-      lbImg.style.opacity    = '0';
-      setTimeout(() => {
-        lbIdx = (newIdx + srcs.length) % srcs.length;
-        lbImg.src = srcs[lbIdx];
-        lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
-        lbImg.style.transition = 'none';
-        lbImg.style.transform  = `translateX(${dir * w * 0.55}px) scale(0.88)`;
-        lbImg.style.opacity    = '0';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          lbImg.style.transition = 'transform 0.42s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s';
-          lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
-          lbImg.style.opacity    = '1';
-        }));
-      }, 210);
+      // dir: 1 = next, -1 = prev
+      if (lbBusy) return;
+      lbBusy = true;
+      lbIdx  = (newIdx + srcs.length) % srcs.length;
+
+      // Le slide recyclé saute instantanément à l'opposé (il est hors écran)
+      const recycled = slide(dir > 0 ? -1 : 1);
+      recycled.style.transition = 'none';
+      recycled.dataset.pos      = String(dir > 0 ? 1 : -1);
+      recycled.querySelector('img').src = srcs[(lbIdx + (dir > 0 ? 1 : -1) + srcs.length) % srcs.length];
+
+      // Les deux autres slides s'animent avec CSS transition
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        recycled.style.transition = '';
+        slide(0).dataset.pos      = String(-dir);
+        slide(dir > 0 ? 1 : -1).dataset.pos = '0';
+        lbCounter.textContent     = `${lbIdx + 1} / ${srcs.length}`;
+        setTimeout(() => { lbBusy = false; }, 500);
+      }));
     };
 
     const openLb = idx => {
       lbIdx = (idx + srcs.length) % srcs.length;
-      lbImg.src = srcs[lbIdx];
-      lbImg.style.transition = 'none';
-      lbImg.style.transform  = 'scale(0.88)';
-      lbImg.style.opacity    = '0';
-      lbCounter.textContent  = `${lbIdx + 1} / ${srcs.length}`;
+      // Placer tous les slides sans transition
+      lbSlides.forEach(s => { s.style.transition = 'none'; });
+      lbSlides[0].dataset.pos = '-1';
+      lbSlides[1].dataset.pos = '0';
+      lbSlides[2].dataset.pos = '1';
+      syncContent();
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
       if (nav) nav.style.opacity = '0';
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        lbImg.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s';
-        lbImg.style.transform  = 'scale(1)';
-        lbImg.style.opacity    = '1';
-      }));
+      requestAnimationFrame(() => {
+        lbSlides.forEach(s => { s.style.transition = ''; });
+      });
     };
 
     const closeLb = () => {
@@ -149,61 +163,96 @@ document.addEventListener('DOMContentLoaded', () => {
       if (nav) nav.style.opacity = '';
     };
 
-    // ── Drag physique ──
-    const onStart = x => { dragStart = x; dragging = false; lbImg.style.transition = 'none'; };
-    const onMove  = x => {
-      if (dragStart === null) return;
-      const dx   = x - dragStart;
-      dragging   = Math.abs(dx) > 6;
-      const tilt = dx * 0.012;
-      const sc   = 1 - Math.min(Math.abs(dx) * 0.00035, 0.1);
-      lbImg.style.transform = `translateX(${dx}px) rotate(${tilt}deg) scale(${sc})`;
+    // ── Drag : déplace les 3 slides ensemble ──
+    const onStart = x => {
+      if (lbBusy) return;
+      dragStart = x; dragging = false;
+      lbSlides.forEach(s => { s.style.transition = 'none'; });
     };
+
+    const onMove = x => {
+      if (dragStart === null) return;
+      const dx = x - dragStart;
+      dragging = Math.abs(dx) > 6;
+      lbSlides.forEach(s => {
+        const pos = parseInt(s.dataset.pos);
+        s.style.transform = `translateX(calc(${pos * 100}% + ${dx}px))`;
+      });
+      // Blur progressif sur l'image qui arrive
+      const progress  = Math.min(Math.abs(dx) / (W() * 0.45), 1);
+      const arriving  = slide(dx < 0 ? 1 : -1);
+      const aImg      = arriving.querySelector('img');
+      const blur      = 7 * (1 - progress);
+      const bright    = 0.4 + 0.6 * progress;
+      const sc        = 0.82 + 0.18 * progress;
+      aImg.style.filter    = `blur(${blur}px) brightness(${bright})`;
+      aImg.style.opacity   = String(0.5 + 0.5 * progress);
+      aImg.style.transform = `scale(${sc})`;
+    };
+
     const onEnd = x => {
       if (dragStart === null) return;
-      const dx        = x - dragStart;
-      const threshold = lb.offsetWidth * 0.22;
+      const dx  = x - dragStart;
+      const thr = W() * 0.22;
       dragStart = null;
-      if (Math.abs(dx) > threshold) {
-        const w   = lb.offsetWidth;
-        const out = dx < 0 ? -w : w;
-        lbImg.style.transition = 'transform 0.24s cubic-bezier(0.4,0,1,1), opacity 0.2s';
-        lbImg.style.transform  = `translateX(${out}px) rotate(${dx < 0 ? -10 : 10}deg) scale(0.82)`;
-        lbImg.style.opacity    = '0';
-        setTimeout(() => {
-          lbIdx = ((dx < 0 ? lbIdx + 1 : lbIdx - 1) + srcs.length) % srcs.length;
-          lbImg.src = srcs[lbIdx];
+
+      // Reset inline img styles (CSS classes reprennent le relais)
+      lbSlides.forEach(s => {
+        const img = s.querySelector('img');
+        img.style.filter = img.style.opacity = img.style.transform = '';
+      });
+
+      if (Math.abs(dx) > thr) {
+        // Compléter le swipe depuis la position actuelle
+        const dir = dx < 0 ? 1 : -1;
+        lbIdx = (lbIdx + dir + srcs.length) % srcs.length;
+        lbBusy = true;
+
+        const recycled = lbSlides.find(s => parseInt(s.dataset.pos) === -dir);
+        recycled.style.transition = 'none';
+        recycled.style.transform  = `translateX(${dir * W()}px)`;
+        recycled.dataset.pos      = String(dir);
+        recycled.querySelector('img').src = srcs[(lbIdx + dir + srcs.length) % srcs.length];
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          lbSlides.forEach(s => {
+            s.style.transition = 'transform 0.38s cubic-bezier(0.34,1.56,0.64,1)';
+          });
+          recycled.style.transition = '';
+          lbSlides.find(s => parseInt(s.dataset.pos) === 0).dataset.pos  = String(-dir);
+          lbSlides.find(s => parseInt(s.dataset.pos) === dir).dataset.pos = '0';
           lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
-          lbImg.style.transition = 'none';
-          lbImg.style.transform  = `translateX(${dx < 0 ? w * 0.4 : -w * 0.4}px) scale(0.88)`;
-          lbImg.style.opacity    = '0';
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            lbImg.style.transition = 'transform 0.44s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s';
-            lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
-            lbImg.style.opacity    = '1';
-          }));
-        }, 220);
+          setTimeout(() => {
+            lbSlides.forEach(s => { s.style.transform = s.style.transition = ''; });
+            lbBusy = false;
+          }, 420);
+        }));
+
       } else {
         // Snap back élastique
-        lbImg.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
-        lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
+        lbSlides.forEach(s => {
+          s.style.transition = 'transform 0.48s cubic-bezier(0.34,1.56,0.64,1)';
+          s.style.transform  = `translateX(${parseInt(s.dataset.pos) * 100}%)`;
+        });
+        setTimeout(() => {
+          lbSlides.forEach(s => { s.style.transform = s.style.transition = ''; });
+        }, 500);
       }
     };
 
     // Mouse
-    lbImg.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
+    lbTrack.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
     window.addEventListener('mousemove', e => { if (dragStart !== null) onMove(e.clientX); });
     window.addEventListener('mouseup',   e => { if (dragStart !== null) onEnd(e.clientX); });
 
     // Touch
-    lbImg.addEventListener('touchstart', e => { onStart(e.touches[0].clientX); }, { passive: true });
+    lbTrack.addEventListener('touchstart', e => { onStart(e.touches[0].clientX); }, { passive: true });
     lb.addEventListener('touchmove', e => {
       if (dragStart !== null && Math.abs(e.touches[0].clientX - dragStart) > 8) e.preventDefault();
       onMove(e.touches[0].clientX);
     }, { passive: false });
     lb.addEventListener('touchend', e => { onEnd(e.changedTouches[0].clientX); });
 
-    // Fermer sur fond (seulement si pas de drag)
     lb.addEventListener('click', e => { if (e.target === lb && !dragging) closeLb(); });
 
     container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
@@ -219,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight') lbGo(lbIdx + 1,  1);
     });
 
-    // Trackpad / molette
     let wheelCooldown = false;
     lb.addEventListener('wheel', e => {
       e.preventDefault();
