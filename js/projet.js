@@ -253,7 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: false });
     lb.addEventListener('touchend', e => { onEnd(e.changedTouches[0].clientX); });
 
-    lb.addEventListener('click', e => { if (e.target === lb && !dragging) closeLb(); });
+    lb.addEventListener('click', e => {
+      if (!dragging && (e.target === lb || e.target.closest('.lb-slide[data-pos="0"]'))) closeLb();
+    });
 
     container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
       img.addEventListener('click', () => openLb(i));
