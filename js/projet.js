@@ -218,6 +218,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowLeft')  lbGo(lbIdx - 1, -1);
       if (e.key === 'ArrowRight') lbGo(lbIdx + 1,  1);
     });
+
+    // Trackpad / molette
+    let wheelCooldown = false;
+    lb.addEventListener('wheel', e => {
+      e.preventDefault();
+      if (wheelCooldown) return;
+      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(d) < 30) return;
+      wheelCooldown = true;
+      d > 0 ? lbGo(lbIdx + 1, 1) : lbGo(lbIdx - 1, -1);
+      setTimeout(() => { wheelCooldown = false; }, 520);
+    }, { passive: false });
   }
 
   /* ── Entrance animation ── */
