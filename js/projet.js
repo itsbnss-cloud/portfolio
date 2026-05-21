@@ -115,14 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
       lbNext.disabled = srcs.length <= 1;
     };
 
+    const nav = document.getElementById('nav');
     const openLb = idx => {
       lbShow(idx);
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
+      if (nav) nav.style.opacity = '0';
     };
     const closeLb = () => {
       lb.classList.remove('open');
       document.body.style.overflow = '';
+      if (nav) nav.style.opacity = '';
     };
 
     container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
