@@ -93,19 +93,63 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `).join('');
 
-    // Lightbox
-    const lb     = document.getElementById('lb');
-    const lbImg  = document.getElementById('lb-img');
-    const lbClose = document.getElementById('lb-close');
-    const openLb = src => { lbImg.src = src; lb.classList.add('open'); document.body.style.overflow = 'hidden'; };
-    const closeLb = ()  => { lb.classList.remove('open'); document.body.style.overflow = ''; };
+    // Lightbox avec navigation
+    const lb        = document.getElementById('lb');
+    const lbImg     = document.getElementById('lb-img');
+    const lbClose   = document.getElementById('lb-close');
+    const lbPrev    = document.getElementById('lb-prev');
+    const lbNext    = document.getElementById('lb-next');
+    const lbCounter = document.getElementById('lb-counter');
+    const srcs      = project.gallery;
+    let lbIdx       = 0;
 
-    container.querySelectorAll('.projet-img-wrap img').forEach(img => {
-      img.addEventListener('click', () => openLb(img.src));
+    const lbShow = idx => {
+      lbIdx = (idx + srcs.length) % srcs.length;
+      lbImg.style.opacity = '0';
+      setTimeout(() => {
+        lbImg.src = srcs[lbIdx];
+        lbImg.style.opacity = '1';
+      }, 120);
+      lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
+      lbPrev.disabled = srcs.length <= 1;
+      lbNext.disabled = srcs.length <= 1;
+    };
+
+    const openLb = idx => {
+      lbShow(idx);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeLb = () => {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
+      img.addEventListener('click', () => openLb(i));
     });
     lbClose.addEventListener('click', closeLb);
+    lbPrev.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx - 1); });
+    lbNext.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx + 1); });
     lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+    // Clavier
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape')     closeLb();
+      if (e.key === 'ArrowLeft')  lbShow(lbIdx - 1);
+      if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
+    });
+
+    // Swipe mobile
+    let swipeX = null;
+    lb.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend',   e => {
+      if (swipeX === null) return;
+      const dx = e.changedTouches[0].clientX - swipeX;
+      if (Math.abs(dx) > 50) dx < 0 ? lbShow(lbIdx + 1) : lbShow(lbIdx - 1);
+      swipeX = null;
+    });
   }
 
   /* ── Entrance animation ── */
