@@ -92,6 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="${src}" alt="${project.title} — visuel ${i + 1}" loading="${i < 2 ? 'eager' : 'lazy'}" />
       </div>
     `).join('');
+
+    // Lightbox
+    const lb     = document.getElementById('lb');
+    const lbImg  = document.getElementById('lb-img');
+    const lbClose = document.getElementById('lb-close');
+    const openLb = src => { lbImg.src = src; lb.classList.add('open'); document.body.style.overflow = 'hidden'; };
+    const closeLb = ()  => { lb.classList.remove('open'); document.body.style.overflow = ''; };
+
+    container.querySelectorAll('.projet-img-wrap img').forEach(img => {
+      img.addEventListener('click', () => openLb(img.src));
+    });
+    lbClose.addEventListener('click', closeLb);
+    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
   }
 
   /* ── Entrance animation ── */

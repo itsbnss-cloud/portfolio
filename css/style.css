@@ -2127,6 +2127,59 @@ body.cursor-dragging #cursor-ring {
   }
 }
 
+/* ── Lightbox simple (galerie plain) ── */
+#lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  cursor: zoom-out;
+}
+#lb.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#lb-img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+  object-fit: contain;
+  transform: scale(0.94);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
+}
+#lb.open #lb-img {
+  transform: scale(1);
+}
+#lb-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#lb-close:hover { background: rgba(255,255,255,0.18); }
+
+/* Rend les images de galerie cliquables */
+.projet-img-wrap img { cursor: zoom-in; }
+
 /* Pagination */
 #projet-pagination {
   background: var(--s1);
