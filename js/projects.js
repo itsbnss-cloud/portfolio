@@ -106,6 +106,18 @@ const projects = [
   },
 
   {
+    id: 9,
+    title: "WOK N'Thai",
+    category: "flyer",
+    tag: "Flyer",
+    thumb: "assets/travaux/WOK N'Thai/recto.jpg",
+    gallery: [
+      "assets/travaux/WOK N'Thai/recto.jpg",
+      "assets/travaux/WOK N'Thai/verso.jpg"
+    ]
+  },
+
+  {
     id: 7,
     title: "Evox Performance",
     category: "auto",
