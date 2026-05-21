@@ -2177,8 +2177,8 @@ body.cursor-dragging #cursor-ring {
 }
 #lb-close:hover { background: rgba(255,255,255,0.18); }
 
-/* Rend les images de galerie cliquables */
-.projet-img-wrap img { cursor: zoom-in; }
+/* Images de galerie cliquables (override protection anti-copie) */
+.projet-img-wrap img { pointer-events: auto; cursor: zoom-in; }
 
 /* Pagination */
 #projet-pagination {
