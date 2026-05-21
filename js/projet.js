@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lightbox avec navigation
     const lb        = document.getElementById('lb');
     const lbImg     = document.getElementById('lb-img');
-    const lbClose   = document.getElementById('lb-close');
     const lbPrev    = document.getElementById('lb-prev');
     const lbNext    = document.getElementById('lb-next');
     const lbCounter = document.getElementById('lb-counter');
@@ -131,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
       img.addEventListener('click', () => openLb(i));
     });
-    lbClose.addEventListener('click', closeLb);
     lbPrev.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx - 1); });
     lbNext.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx + 1); });
     lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
