@@ -2151,12 +2151,11 @@ body.cursor-dragging #cursor-ring {
   border-radius: 10px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
   object-fit: contain;
-  transform: scale(0.93);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease;
-  cursor: default;
+  cursor: grab;
   display: block;
+  user-select: none;
 }
-#lb.open #lb-img { transform: scale(1); }
+#lb-img:active { cursor: grabbing; }
 
 #lb-prev, #lb-next {
   position: absolute;

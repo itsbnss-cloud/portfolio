@@ -93,63 +93,130 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `).join('');
 
-    // Lightbox avec navigation
+    // ── Lightbox avec swipe élastique ──
     const lb        = document.getElementById('lb');
     const lbImg     = document.getElementById('lb-img');
     const lbPrev    = document.getElementById('lb-prev');
     const lbNext    = document.getElementById('lb-next');
     const lbCounter = document.getElementById('lb-counter');
+    const nav       = document.getElementById('nav');
     const srcs      = project.gallery;
     let lbIdx       = 0;
+    let dragging    = false;
+    let dragStart   = null;
 
-    const lbShow = idx => {
-      lbIdx = (idx + srcs.length) % srcs.length;
-      lbImg.style.opacity = '0';
+    // Slide vers un nouvel index (via boutons/clavier)
+    const lbGo = (newIdx, dir) => {
+      const w = lb.offsetWidth;
+      lbImg.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
+      lbImg.style.transform  = `translateX(${dir * -w * 0.55}px) scale(0.88)`;
+      lbImg.style.opacity    = '0';
       setTimeout(() => {
+        lbIdx = (newIdx + srcs.length) % srcs.length;
         lbImg.src = srcs[lbIdx];
-        lbImg.style.opacity = '1';
-      }, 120);
-      lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
-      lbPrev.disabled = srcs.length <= 1;
-      lbNext.disabled = srcs.length <= 1;
+        lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
+        lbImg.style.transition = 'none';
+        lbImg.style.transform  = `translateX(${dir * w * 0.55}px) scale(0.88)`;
+        lbImg.style.opacity    = '0';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          lbImg.style.transition = 'transform 0.42s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s';
+          lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
+          lbImg.style.opacity    = '1';
+        }));
+      }, 210);
     };
 
-    const nav = document.getElementById('nav');
     const openLb = idx => {
-      lbShow(idx);
+      lbIdx = (idx + srcs.length) % srcs.length;
+      lbImg.src = srcs[lbIdx];
+      lbImg.style.transition = 'none';
+      lbImg.style.transform  = 'scale(0.88)';
+      lbImg.style.opacity    = '0';
+      lbCounter.textContent  = `${lbIdx + 1} / ${srcs.length}`;
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
       if (nav) nav.style.opacity = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        lbImg.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s';
+        lbImg.style.transform  = 'scale(1)';
+        lbImg.style.opacity    = '1';
+      }));
     };
+
     const closeLb = () => {
       lb.classList.remove('open');
       document.body.style.overflow = '';
       if (nav) nav.style.opacity = '';
     };
 
+    // ── Drag physique ──
+    const onStart = x => { dragStart = x; dragging = false; lbImg.style.transition = 'none'; };
+    const onMove  = x => {
+      if (dragStart === null) return;
+      const dx   = x - dragStart;
+      dragging   = Math.abs(dx) > 6;
+      const tilt = dx * 0.012;
+      const sc   = 1 - Math.min(Math.abs(dx) * 0.00035, 0.1);
+      lbImg.style.transform = `translateX(${dx}px) rotate(${tilt}deg) scale(${sc})`;
+    };
+    const onEnd = x => {
+      if (dragStart === null) return;
+      const dx        = x - dragStart;
+      const threshold = lb.offsetWidth * 0.22;
+      dragStart = null;
+      if (Math.abs(dx) > threshold) {
+        const w   = lb.offsetWidth;
+        const out = dx < 0 ? -w : w;
+        lbImg.style.transition = 'transform 0.24s cubic-bezier(0.4,0,1,1), opacity 0.2s';
+        lbImg.style.transform  = `translateX(${out}px) rotate(${dx < 0 ? -10 : 10}deg) scale(0.82)`;
+        lbImg.style.opacity    = '0';
+        setTimeout(() => {
+          lbIdx = ((dx < 0 ? lbIdx + 1 : lbIdx - 1) + srcs.length) % srcs.length;
+          lbImg.src = srcs[lbIdx];
+          lbCounter.textContent = `${lbIdx + 1} / ${srcs.length}`;
+          lbImg.style.transition = 'none';
+          lbImg.style.transform  = `translateX(${dx < 0 ? w * 0.4 : -w * 0.4}px) scale(0.88)`;
+          lbImg.style.opacity    = '0';
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            lbImg.style.transition = 'transform 0.44s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s';
+            lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
+            lbImg.style.opacity    = '1';
+          }));
+        }, 220);
+      } else {
+        // Snap back élastique
+        lbImg.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+        lbImg.style.transform  = 'translateX(0) rotate(0deg) scale(1)';
+      }
+    };
+
+    // Mouse
+    lbImg.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
+    window.addEventListener('mousemove', e => { if (dragStart !== null) onMove(e.clientX); });
+    window.addEventListener('mouseup',   e => { if (dragStart !== null) onEnd(e.clientX); });
+
+    // Touch
+    lbImg.addEventListener('touchstart', e => { onStart(e.touches[0].clientX); }, { passive: true });
+    lb.addEventListener('touchmove', e => {
+      if (dragStart !== null && Math.abs(e.touches[0].clientX - dragStart) > 8) e.preventDefault();
+      onMove(e.touches[0].clientX);
+    }, { passive: false });
+    lb.addEventListener('touchend', e => { onEnd(e.changedTouches[0].clientX); });
+
+    // Fermer sur fond (seulement si pas de drag)
+    lb.addEventListener('click', e => { if (e.target === lb && !dragging) closeLb(); });
+
     container.querySelectorAll('.projet-img-wrap img').forEach((img, i) => {
       img.addEventListener('click', () => openLb(i));
     });
-    lbPrev.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx - 1); });
-    lbNext.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIdx + 1); });
-    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+    lbPrev.addEventListener('click', e => { e.stopPropagation(); lbGo(lbIdx - 1, -1); });
+    lbNext.addEventListener('click', e => { e.stopPropagation(); lbGo(lbIdx + 1,  1); });
 
-    // Clavier
     document.addEventListener('keydown', e => {
       if (!lb.classList.contains('open')) return;
       if (e.key === 'Escape')     closeLb();
-      if (e.key === 'ArrowLeft')  lbShow(lbIdx - 1);
-      if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
-    });
-
-    // Swipe mobile
-    let swipeX = null;
-    lb.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend',   e => {
-      if (swipeX === null) return;
-      const dx = e.changedTouches[0].clientX - swipeX;
-      if (Math.abs(dx) > 50) dx < 0 ? lbShow(lbIdx + 1) : lbShow(lbIdx - 1);
-      swipeX = null;
+      if (e.key === 'ArrowLeft')  lbGo(lbIdx - 1, -1);
+      if (e.key === 'ArrowRight') lbGo(lbIdx + 1,  1);
     });
   }
 
